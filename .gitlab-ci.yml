@@ -1,4 +1,4 @@
-# The Docker image that will be used to build your app
+# Use Node.js image
 image: node:18
 
 stages:
@@ -10,11 +10,16 @@ cache:
   paths:
     - node_modules/
 
+# Install dependencies
 install_dependencies:
   stage: install
   script:
     - npm ci
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "webhook" # Trigger on webhook events
+    - if: $CI_COMMIT_BRANCH == "main"     # Or manual pushes to main
 
+# Build the app
 build:
   stage: build
   script: 
@@ -22,9 +27,11 @@ build:
   artifacts:
     paths:
       - dist/
-  only:
-    - main
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "webhook" # Trigger on webhook events
+    - if: $CI_COMMIT_BRANCH == "main"     # Or manual pushes to main
 
+# Deploy to GitLab Pages
 pages:
   stage: deploy
   script:
@@ -32,5 +39,6 @@ pages:
   artifacts:
     paths:
       - public
-  only:
-    - main
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "webhook" # Trigger on webhook events
+    - if: $CI_COMMIT_BRANCH == "main"     # Or manual pushes to main
