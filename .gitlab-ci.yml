@@ -1,44 +1,22 @@
-# Use Node.js image
-image: node:18
-
 stages:
-  - install
-  - build
-  - deploy
+ - test
+ - build
+ - image
 
-cache:
-  paths:
-    - node_modules/
+variables:
+ IMAGE_NAME: development
+ IMAGE_TAG: latest
 
-# Install dependencies
-install_dependencies:
-  stage: install
-  script:
-    - npm ci
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "webhook" # Trigger on webhook events
-    - if: $CI_COMMIT_BRANCH == "main"     # Or manual pushes to main
+test:
+ stage: test
+ image: node:18
+ script:
+ - npm install
+ - npm test
 
-# Build the app
 build:
-  stage: build
-  script: 
-    - npm run build
-  artifacts:
-    paths:
-      - dist/
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "webhook" # Trigger on webhook events
-    - if: $CI_COMMIT_BRANCH == "main"     # Or manual pushes to main
-
-# Deploy to GitLab Pages
-pages:
-  stage: deploy
-  script:
-    - mv dist public
-  artifacts:
-    paths:
-      - public
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "webhook" # Trigger on webhook events
-    - if: $CI_COMMIT_BRANCH == "main"     # Or manual pushes to main
+ stage: build
+ image: node:18
+ script:
+ - npm install
+ - npm run build
