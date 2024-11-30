@@ -1,11 +1,13 @@
-image: "node:18-alpine"
-
-stages:
-  - build
-  - deploy
-
-build:
-  stage: build
+image: node:18
+pages:
+  stage: deploy
+  cache:
+    key:
+      files:
+        - package-lock.json
+      prefix: npm
+    paths:
+      - node_modules/
   script:
     - npm install
     - npm run build
@@ -13,13 +15,5 @@ build:
   artifacts:
     paths:
       - public
-
-deploy-staging:
-  stage: deploy
-  script:
-    - echo 'Staging deployment job'
-  artifacts:
-    paths:
-      - public
-  except:
-    - master
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
