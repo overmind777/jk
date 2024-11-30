@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import Input from "../shared/Input.tsx";
+import Button from "../shared/Button.tsx";
 
 
 const SinginForm = () => {
@@ -7,10 +9,10 @@ const SinginForm = () => {
         <Wrapper>
             <h2>Вхід</h2>
             <FormStyled action="">
-                <InputStyled type="text" placeholder="Логін або Email"/>
-                <InputStyled type="text" placeholder="Пароль"/>
-                <ButtonStyled type="submit">Увійти</ButtonStyled>
-                <p>Немає акаунту? <NavLinkStyled to={ "/ragister" }>Зареєструватися</NavLinkStyled></p>
+                <Input text={'Email'}/>
+                <Input text={'Password'}/>
+                <Button color={'#1cb955'} text={'Увійти'}/>
+                <p>Немає акаунту? <NavLinkStyled to={ "/register" }>Зареєструватися</NavLinkStyled></p>
             </FormStyled>
         </Wrapper>
     );
@@ -34,30 +36,4 @@ export const FormStyled = styled.form`
     display: flex;
     flex-direction: column;
     gap: 20px;
-`
-
-export const InputStyled = styled.input`
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid rgba(28, 185, 85, 0.2);
-    background: rgba(28, 185, 85, 0.03);
-    color: var(--dark-text);
-    font-size: 16px;
-`
-
-export const ButtonStyled = styled.button`
-    padding: 15px;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    color: var(--dark-text);
-    background: #1cb955;
-    transition: all 0.3s ease;
-
-    &:hover {
-        background-color: #2d7d46;
-        transform: translateY(-2px);
-    }
-
 `
