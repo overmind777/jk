@@ -1,0 +1,22 @@
+stages:
+ - test
+ - build
+ - image
+
+variables:
+ IMAGE_NAME: development
+ IMAGE_TAG: latest
+
+test:
+ stage: test
+ image: node:18
+ script:
+ - npm install
+ - npm test
+
+build:
+ stage: build
+ image: node:18
+ script:
+ - npm install
+ - npm run build
