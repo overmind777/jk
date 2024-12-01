@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import {createBrowserRouter, Navigate} from "react-router-dom";
 import Layout from "../pages/Layout.tsx";
 import Home from "../pages/Home.tsx";
 import Trainings from "../pages/Trainings.tsx";
@@ -7,6 +7,12 @@ import Services from "../pages/Services.tsx";
 import About from "../pages/About.tsx";
 import Login from "../pages/Login.tsx";
 import Registration from "../pages/Registration.tsx";
+import AdminPanel from '../pages/AdminPanel.tsx';
+
+const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+    const isAuthenticated = true; // Замініть на реальну логіку перевірки
+    return isAuthenticated ? children : <Navigate to="/login" />;
+};
 
 const router = createBrowserRouter([
     {
@@ -42,7 +48,11 @@ const router = createBrowserRouter([
                 element: <Registration/>,
             }
         ]
-    }
+    },
+    {
+        path: '/admin/*',
+        element: (<PrivateRoute><AdminPanel /></PrivateRoute>),
+    },
 ])
 
 export default router
