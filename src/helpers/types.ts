@@ -21,7 +21,7 @@ export interface LoginCredentials {
 
 export interface AuthState {
     user: User;
-    token: string;
+    refreshToken: string;
     isAuthenticated: boolean;
     isAdmin: boolean;
     error: string | null;

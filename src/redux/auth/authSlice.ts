@@ -7,30 +7,33 @@ const initialState: AuthState = {
         name: '',
         email: '',
     },
-    token: '',
+    refreshToken: '',
     isAuthenticated: false,
     isAdmin: false,
     error: '',
 }
 
-const authSlice = createSlice({
+const authSlice = createSlice( {
     name: 'auth',
     initialState,
     reducers: {},
-    extraReducers: (builder) => {
-        builder.addCase(registerThunk.fulfilled, (state, {payload})=>{
+    extraReducers: ( builder ) => {
+        builder.addCase( registerThunk.fulfilled, ( state, { payload } ) => {
             state.user = payload.user;
-            state.token = payload.token;
+            state.refreshToken = payload.token;
             state.isAuthenticated = false;
             state.isAdmin = false;
-        })
-            .addMatcher(isAnyOf(
+        } )
+            .addCase( loginThunk.fulfilled, ( state, { payload } ) => {
+                state.user = payload.user
+            } )
+            .addMatcher( isAnyOf(
                 registerThunk.rejected,
                 loginThunk.rejected,
-            ), (state, action: PayloadAction<unknown>) => {
+            ), ( state, action: PayloadAction<unknown> ) => {
                 state.error = action.payload as string;
-            })
+            } )
     }
-})
+} )
 
 export const authReducer = authSlice.reducer;
