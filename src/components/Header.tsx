@@ -3,6 +3,10 @@ import styled from "styled-components";
 
 
 const Header = () => {
+
+    const registred = localStorage.getItem("Authenticated");
+    console.log(registred);
+
     return (
         <Wrapper>
             <NavLinkStyled to={ '/' }>Головна</NavLinkStyled>
@@ -11,7 +15,11 @@ const Header = () => {
             <NavLinkStyled to={ '/services' }>Послуги</NavLinkStyled>
             <NavLinkStyled to={ '/about' }>Про нас</NavLinkStyled>
             <MenuWrapper>
-                <NavLinkStyled to={ '/login' }>Увійти</NavLinkStyled>
+                {registred ? (
+                    <NavLinkStyled to={'/login'}>Увійти</NavLinkStyled>
+                ):(
+                    <NavLinkStyled to={'/register'}>Register</NavLinkStyled>
+                )}
                 <h3>UA</h3>
             </MenuWrapper>
         </Wrapper>

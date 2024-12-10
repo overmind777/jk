@@ -1,26 +1,35 @@
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import Button from "../shared/Button.tsx";
-import { useAppDispatch } from "../helpers/hooks.ts";
+import {useAppDispatch, useAppSelector} from "../helpers/hooks.ts";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginThunk } from "../redux/auth/operations.ts";
 import { loginSchema } from "../helpers/schemas.ts";
 import { InputStyled } from "./SingupForm.tsx";
 import * as yup from "yup";
+import {selectUser} from "../redux/auth/selectors.ts";
+import {useEffect} from "react";
 
 type FormData = yup.InferType<typeof loginSchema>;
 
 const SinginForm = () => {
     const dispatch = useAppDispatch()
+    const select = useAppSelector(selectUser)
+    const navigate = useNavigate();
 
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>( {
+    const { register, reset, handleSubmit, formState: { errors } } = useForm<FormData>( {
         resolver: yupResolver( loginSchema ),
     } );
+
+    useEffect(()=>{
+        console.log("Singin form", select);
+    },[select])
+
     const onSubmit = async ( data: FormData ) => {
-        console.log( data )
-        const user = await dispatch( loginThunk( data ) )
-        console.log( `singUp 35 : ${ user }` )
+        await dispatch(loginThunk(data)).unwrap()
+        reset()
+        navigate('/')
     }
     return (
         <Wrapper>

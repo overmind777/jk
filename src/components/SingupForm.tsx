@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from "../helpers/hooks.ts";
 import { registerThunk } from "../redux/auth/operations.ts";
 import { registerSchema } from "../helpers/schemas.ts";
+import React from "react";
 
 
 type FormData = yup.InferType<typeof registerSchema>;
@@ -20,10 +21,23 @@ const SingupForm = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>( {
         resolver: yupResolver( registerSchema ),
     } );
-    const onSubmit = async ( data: FormData ) => {
-        const user = await dispatch( registerThunk( data ) )
-        console.log( `singUp 35 : ${ user }` )
-    }
+
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>, data: FormData) => {
+        e.preventDefault()
+        try {
+            const result = await dispatch(registerThunk(data)).unwrap(); // Розпаковка результату
+            if (result) {
+                localStorage.setItem("Authenticated", "true"); // Зберігаємо як рядок
+            } else {
+                localStorage.setItem("Authenticated", "false");
+            }
+        } catch (error) {
+            console.error("Registration failed:", error);
+            localStorage.setItem("Authenticated", "false");
+        }
+    };
+
+    //TODO create modal for login and register
 
     return (
         <Wrapper>
