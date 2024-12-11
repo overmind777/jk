@@ -2,17 +2,7 @@ import ReactModal from 'react-modal';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../helpers/hooks.ts';
 import { openModal, selectModal } from '../../redux/modal/modalSlice.ts';
-
-const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-    },
-};
+import {ReactModalStyled, WrapperStyled} from "./Modal.styled.ts";
 
 ReactModal.setAppElement( '#root' );
 
@@ -22,14 +12,13 @@ const Modal = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch()
 
     return (
-        <div>
-            <ReactModal
+        <WrapperStyled>
+            <ReactModalStyled
             isOpen={isOpen}
-            onRequestClose={() => dispatch(openModal(false))}
-            style={customStyles}>
+            onRequestClose={() => dispatch(openModal(false))}>
                 {children}
-            </ReactModal>
-        </div>
+            </ReactModalStyled>
+        </WrapperStyled>
     );
 };
 

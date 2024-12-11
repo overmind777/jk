@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import ReactModal from "react-modal";
 
-export const StyledWrapper = styled.div`
+export const WrapperStyled = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -13,32 +14,12 @@ export const StyledWrapper = styled.div`
   z-index: 999;
 `;
 
-export const ContentWrapper = styled.div`
-  position: relative;
-  background-color: #1c1c1c;
-  border: 1px solid rgba(244, 244, 244, 0.3);
-  overflow: hidden;
-  border-radius: 20px;
-  width: 335px;
-`;
-
-export const StyledCloseButton = styled.button`
-  border: none;
-  padding: 5px;
-  width: 18px;
-  height: 18px;
-  background-color: transparent;
-
-  position: absolute;
-
-  top: 14px;
-  right: 20px;
-  &:hover {
-    transform: scale(1.2);
-  }
-
-  svg {
-    width: 18px;
-    height: 18px;
-  }
-`;
+export const ReactModalStyled = styled(ReactModal)`
+    background-color: #1c1c1c;
+    width: 400px;
+    height: 400px;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+`

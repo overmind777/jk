@@ -23,8 +23,9 @@ export const ButtonStyled = styled.button<ButtonProps>`
     font-size: 16px;
     cursor: pointer;
     color: var(--dark-text);
-    //background-color: ;
-    background-color: ${ ( { color } ) => color };
+    color-scheme: inherit;
+    background-color: inherit;
+    //background-color: ${ ( { color } ) => color };
 
     transition: all 0.3s ease;
 

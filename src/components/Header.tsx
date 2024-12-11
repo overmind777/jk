@@ -1,22 +1,28 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import ButtonHeader from '../shared/ButtonHeader.tsx';
-import { useAppDispatch, useAppSelector } from '../helpers/hooks.ts';
+import {useAppDispatch, useAppSelector} from '../helpers/hooks.ts';
 import { openModal } from '../redux/modal/modalSlice.ts';
-import { selectUser } from '../redux/auth/selectors.ts';
 import { useEffect } from 'react';
+import {selectUser} from "../redux/auth/selectors.ts";
 
 const Header = () => {
     const dispatch = useAppDispatch();
-    const {isAuthenticated} = useAppSelector(selectUser)
+    const isAuthenticatedState = useAppSelector(selectUser)
+    const isAuthenticatedLocal = localStorage.getItem("Authenticated");
 
     useEffect( () => {
-        console.log(isAuthenticated)
-    }, [isAuthenticated] );
+        console.log(isAuthenticatedLocal)
+        console.log(isAuthenticatedState.isAuthenticated)
+    }, [isAuthenticatedLocal, isAuthenticatedState.isAuthenticated] );
 
     const handleClick = () => {
         dispatch(openModal(true));
     };
+
+    const handleChangeTheme = ()=>{
+        //TODO create localization
+    }
 
     return (
         <Wrapper>
@@ -26,12 +32,12 @@ const Header = () => {
             <NavLinkStyled to={'/services'}>Послуги</NavLinkStyled>
             <NavLinkStyled to={'/about'}>Про нас</NavLinkStyled>
             <MenuWrapper>
-                {isAuthenticated ? (
+                {isAuthenticatedLocal || isAuthenticatedState.isAuthenticated ? (
                     <ButtonHeader text={"Login"} onClick={handleClick} />
                 ) : (
                     <ButtonHeader text={"Register"} onClick={handleClick} />
                 )}
-                <h3>UA</h3>
+                <ButtonHeader text={"UA"} onClick={handleChangeTheme} />
             </MenuWrapper>
         </Wrapper>
     );
