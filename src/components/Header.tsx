@@ -1,24 +1,35 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-
+import ButtonHeader from '../shared/ButtonHeader.tsx';
+import { useAppDispatch, useAppSelector } from '../helpers/hooks.ts';
+import { openModal } from '../redux/modal/modalSlice.ts';
+import { selectUser } from '../redux/auth/selectors.ts';
+import { useEffect } from 'react';
 
 const Header = () => {
+    const dispatch = useAppDispatch();
+    const {isAuthenticated} = useAppSelector(selectUser)
 
-    const registred = localStorage.getItem("Authenticated");
-    console.log(registred);
+    useEffect( () => {
+        console.log(isAuthenticated)
+    }, [isAuthenticated] );
+
+    const handleClick = () => {
+        dispatch(openModal(true));
+    };
 
     return (
         <Wrapper>
-            <NavLinkStyled to={ '/' }>Головна</NavLinkStyled>
-            <NavLinkStyled to={ '/trainings' }>Тренінги</NavLinkStyled>
-            <NavLinkStyled to={ '/trainers' }>Тренери</NavLinkStyled>
-            <NavLinkStyled to={ '/services' }>Послуги</NavLinkStyled>
-            <NavLinkStyled to={ '/about' }>Про нас</NavLinkStyled>
+            <NavLinkStyled to={'/'}>Головна</NavLinkStyled>
+            <NavLinkStyled to={'/trainings'}>Тренінги</NavLinkStyled>
+            <NavLinkStyled to={'/trainers'}>Тренери</NavLinkStyled>
+            <NavLinkStyled to={'/services'}>Послуги</NavLinkStyled>
+            <NavLinkStyled to={'/about'}>Про нас</NavLinkStyled>
             <MenuWrapper>
-                {registred ? (
-                    <NavLinkStyled to={'/login'}>Увійти</NavLinkStyled>
-                ):(
-                    <NavLinkStyled to={'/register'}>Register</NavLinkStyled>
+                {isAuthenticated ? (
+                    <ButtonHeader text={"Login"} onClick={handleClick} />
+                ) : (
+                    <ButtonHeader text={"Register"} onClick={handleClick} />
                 )}
                 <h3>UA</h3>
             </MenuWrapper>
@@ -43,14 +54,15 @@ export const Wrapper = styled.div`
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
     letter-spacing: 0.5px;
-`
-export const NavLinkStyled = styled( NavLink )`
+`;
+
+export const NavLinkStyled = styled(NavLink)`
     color: var(--dark-text);
-`
+`;
 
 export const MenuWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
-`
+`;

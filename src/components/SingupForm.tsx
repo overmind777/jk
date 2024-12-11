@@ -1,15 +1,14 @@
 import { NavLink } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-
-import Button from "../shared/Button.tsx";
-
-import styled from "styled-components";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from "../helpers/hooks.ts";
 import { registerThunk } from "../redux/auth/operations.ts";
 import { registerSchema } from "../helpers/schemas.ts";
-import React from "react";
+import { openModal } from '../redux/modal/modalSlice.ts';
+
+import styled from "styled-components";
+import ButtonForm from '../shared/ButtonForm.tsx';
 
 
 type FormData = yup.InferType<typeof registerSchema>;
@@ -22,8 +21,8 @@ const SingupForm = () => {
         resolver: yupResolver( registerSchema ),
     } );
 
-    const onSubmit = async (e: React.FormEvent<HTMLFormElement>, data: FormData) => {
-        e.preventDefault()
+    const onSubmit = async (data: FormData) => {
+        dispatch(openModal(false))
         try {
             const result = await dispatch(registerThunk(data)).unwrap(); // Розпаковка результату
             if (result) {
@@ -37,7 +36,6 @@ const SingupForm = () => {
         }
     };
 
-    //TODO create modal for login and register
 
     return (
         <Wrapper>
@@ -49,8 +47,8 @@ const SingupForm = () => {
                 <p>{ errors.email?.message }</p>
                 <InputStyled { ...register( 'password' ) } placeholder={ 'Password' }/>
                 <p>{ errors.password?.message }</p>
-                <Button color={ '#1cb955' } text={ 'Реєстрація' }/>
-                <Button color={ '#cccbc8' } text={ 'Google' }/>
+                <ButtonForm color={ '#1cb955' } text={ 'Реєстрація'}/>
+                <ButtonForm color={ '#cccbc8' } text={ 'Google' }/>
                 <p>Вже є акаунт? <NavLinkStyled to={ '/login' }>Увійти</NavLinkStyled></p>
             </FormStyled>
         </Wrapper>

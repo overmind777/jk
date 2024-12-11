@@ -31,3 +31,7 @@ export interface AuthState {
     isAdmin: boolean;
     error: string | null;
 }
+
+export interface ModalState {
+    isOpen: boolean;
+}
