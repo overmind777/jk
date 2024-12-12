@@ -18,11 +18,11 @@ const SinginForm = () => {
     const navigate = useNavigate();
     const select = useAppSelector(selectUser)
 
-    const {register, reset, handleSubmit, formState: {errors}} = useForm<FormData>({
-        resolver: yupResolver(loginSchema),
-    });
+    const { register, reset, handleSubmit, formState: { errors } } = useForm<FormData>( {
+        resolver: yupResolver( loginSchema ),
+    } );
 
-    const onSubmit = async (data: FormData) => {
+    const onSubmit = async ( data: FormData ) => {
         dispatch(openModal(false))
         try {
             const result = await dispatch(loginThunk(data)).unwrap();
@@ -42,13 +42,13 @@ const SinginForm = () => {
     return (
         <Wrapper>
             <h2>Вхід</h2>
-            <FormStyled onSubmit={handleSubmit(onSubmit)}>
-                <InputStyled {...register('email')} placeholder={'Email'}/>
-                <p>{errors.email?.message}</p>
-                <InputStyled {...register('password')} placeholder={'Password'}/>
-                <p>{errors.password?.message}</p>
-                <ButtonForm color={'#1cb955'} text={'Увійти'}/>
-                <p>Немає акаунту? <NavLinkStyled to={'/register'}>Зареєструватися</NavLinkStyled></p>
+            <FormStyled onSubmit={ handleSubmit( onSubmit ) }>
+                <InputStyled { ...register( 'email' ) } placeholder={ 'Email' } />
+                <p>{ errors.email?.message }</p>
+                <InputStyled { ...register( 'password' ) } placeholder={ 'Password' } />
+                <p>{ errors.password?.message }</p>
+                <ButtonForm color={ '#1cb955' } text={ 'Увійти' } />
+                <p>Немає акаунту? <NavLinkStyled to={ '/register' }>Зареєструватися</NavLinkStyled></p>
             </FormStyled>
         </Wrapper>
     );
@@ -65,7 +65,7 @@ export const Wrapper = styled.div`
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 `;
 
-export const NavLinkStyled = styled(NavLink)`
+export const NavLinkStyled = styled( NavLink )`
     color: #1cb955;
 `;
 export const FormStyled = styled.form`
