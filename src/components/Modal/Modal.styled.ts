@@ -1,25 +1,16 @@
 import styled from "styled-components";
 import ReactModal from "react-modal";
 
-export const WrapperStyled = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(23, 23, 23, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-`;
-
 export const ReactModalStyled = styled(ReactModal)`
-    background-color: #1c1c1c;
-    width: 400px;
-    height: 400px;
+    position: relative;
+    padding: 30px;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 500px;
     top: 0;
     left: 0;
-    transform: translate(-50%, -50%);
+    transform: translate(50%, 50%);
     z-index: 1000;
 `

@@ -1,3 +1,3 @@
 import { RootState } from "../store.ts";
 
-export const selectUser = (state: RootState) => state.auth
+export const selectAuth = (state: RootState) => state.auth

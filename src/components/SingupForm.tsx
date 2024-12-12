@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,17 +16,20 @@ type FormData = yup.InferType<typeof registerSchema>;
 const SingupForm = () => {
 
     const dispatch = useAppDispatch()
+    const navigate = useNavigate();
 
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>( {
+    const { register, reset, handleSubmit, formState: { errors } } = useForm<FormData>( {
         resolver: yupResolver( registerSchema ),
     } );
 
     const onSubmit = async (data: FormData) => {
         dispatch(openModal(false))
         try {
-            const result = await dispatch(registerThunk(data)).unwrap(); // Розпаковка результату
+            const result = await dispatch(registerThunk(data)).unwrap();
             if (result) {
-                localStorage.setItem("Authenticated", "true"); // Зберігаємо як рядок
+                localStorage.setItem("Authenticated", "true");
+                reset();
+                navigate( '/' );
             } else {
                 localStorage.setItem("Authenticated", "false");
             }
