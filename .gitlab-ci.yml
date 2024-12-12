@@ -1,35 +1,20 @@
 image: node:18
-
-stages:
-  - install
-  - build
-  - deploy
-
-cache:
-  paths:
-    - node_modules/
-
-install_dependencies:
-  stage: install
-  script:
-    - npm ci
-
-build:
-  stage: build
-  script:
-    - npm run build
-  artifacts:
-    paths:
-      - dist/
-  only:
-    - main
-
 pages:
   stage: deploy
+  cache:
+    key:
+      files:
+        - package-lock.json
+      prefix: npm
+    paths:
+      - node_modules/
   script:
-    - cp -r dist public
+    - npm install
+    - npm run build
+    - cp -a dist/. public/
   artifacts:
     paths:
       - public
-  only:
-    - main
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    
