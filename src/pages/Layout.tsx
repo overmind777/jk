@@ -5,17 +5,19 @@ import SinginForm from '../components/SinginForm.tsx';
 import SingupForm from '../components/SingupForm.tsx';
 import { useAppSelector } from '../helpers/hooks.ts';
 import { selectModal } from '../redux/modal/modalSlice.ts';
+import { useState } from 'react';
 
 const Layout = () => {
     const registred = localStorage.getItem( 'Authenticated' );
-    const isOpenModal = useAppSelector(selectModal)
+    const openModal = useAppSelector(selectModal)
+    const [isOpenModal] = useState(openModal)
     return (
         <div>
             <Header />
             <div>
                 <Outlet />
             </div>
-            {isOpenModal ? (<Modal>{ registred ? ( <SinginForm /> ) : ( <SingupForm /> ) }</Modal>) : null}
+            {isOpenModal ?? (<Modal>{ registred ? ( <SinginForm /> ) : ( <SingupForm /> ) }</Modal>)}
         </div>
     );
 };

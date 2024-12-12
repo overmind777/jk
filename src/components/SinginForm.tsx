@@ -26,6 +26,7 @@ const SinginForm = () => {
         reset();
         navigate( '/' );
     };
+    
     return (
         <Wrapper>
             <h2>Вхід</h2>

@@ -3,18 +3,12 @@ import styled from "styled-components";
 import ButtonHeader from '../shared/ButtonHeader.tsx';
 import {useAppDispatch, useAppSelector} from '../helpers/hooks.ts';
 import { openModal } from '../redux/modal/modalSlice.ts';
-import { useEffect } from 'react';
 import {selectUser} from "../redux/auth/selectors.ts";
 
 const Header = () => {
     const dispatch = useAppDispatch();
     const isAuthenticatedState = useAppSelector(selectUser)
     const isAuthenticatedLocal = localStorage.getItem("Authenticated");
-
-    useEffect( () => {
-        console.log(isAuthenticatedLocal)
-        console.log(isAuthenticatedState.isAuthenticated)
-    }, [isAuthenticatedLocal, isAuthenticatedState.isAuthenticated] );
 
     const handleClick = () => {
         dispatch(openModal(true));

@@ -9,6 +9,7 @@ import Login from "../pages/Login.tsx";
 import Registration from "../pages/Registration.tsx";
 import AdminPanel from '../pages/AdminPanel.tsx';
 import UserProfile from '../pages/UserProfile.tsx';
+import ProfileEdit from '../pages/ProfileEdit.tsx';
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
     const isAuthenticated = true; // Замініть на реальну логіку перевірки
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
             {
                 path: 'profile',
                 element: <UserProfile/>,
+            },
+            {
+                path: 'profileEdit',
+                element: <ProfileEdit/>,
             }
         ]
     },
