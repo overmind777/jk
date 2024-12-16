@@ -14,7 +14,7 @@ const Modal = ({children}: { children: React.ReactNode }) => {
     return (
         <>
             <ReactModalStyled
-                isOpen={isOpen}
+                isOpen={isOpen.isOpen}
                 onRequestClose={() => dispatch(openModal(false))}>
                 {children}
             </ReactModalStyled>

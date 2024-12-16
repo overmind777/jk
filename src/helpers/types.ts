@@ -34,4 +34,11 @@ export interface AuthState {
 
 export interface ModalState {
     isOpen: boolean;
+    modalType: string | null;
+}
+
+export interface UserState {
+    name: string;
+    email: string;
+    isLogin: boolean;
 }

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import {NavLink, useNavigate} from 'react-router-dom';
-import {useAppDispatch, useAppSelector} from '../helpers/hooks.ts';
+import {useAppDispatch} from '../helpers/hooks.ts';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {loginThunk} from '../redux/auth/operations.ts';
@@ -9,14 +9,13 @@ import {InputStyled} from './SingupForm.tsx';
 import * as yup from 'yup';
 import {openModal} from '../redux/modal/modalSlice.ts';
 import ButtonForm from '../shared/ButtonForm.tsx';
-import {selectUser} from "../redux/user/userSlice.ts";
+import { setUser } from '../redux/user/userSlice.ts';
 
 type FormData = yup.InferType<typeof loginSchema>;
 
 const SinginForm = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const select = useAppSelector(selectUser)
 
     const { register, reset, handleSubmit, formState: { errors } } = useForm<FormData>( {
         resolver: yupResolver( loginSchema ),
@@ -29,9 +28,8 @@ const SinginForm = () => {
             reset();
             navigate('/');
             if (result) {
-                console.log('ok')
-                sessionStorage.setItem('accessToken', result.tokens.accessToken);
-                select.user.isLogin = true;
+                sessionStorage.setItem('userData', JSON.stringify(result));
+                dispatch(setUser( { name: result.user.name, email: result.user.email, isLogin: true }))
             }
         } catch (error) {
             console.error("Registration failed:", error);

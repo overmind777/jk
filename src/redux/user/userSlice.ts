@@ -1,24 +1,28 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {RootState} from "../store.ts";
+import { UserState } from '../../helpers/types.ts';
 
-const initialState = {
-    user: {
-        email: '',
-        info: '',
-        isLogin: false,
-    }
+const initialState: UserState = {
+    name: '',
+    email: '',
+    isLogin: false,
 }
 
 const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        isLogin: (state, {payload}) => {
-            state.user.isLogin = payload
-        }
+        // Встановлення даних користувача при логіні
+        setUser: (state, action: PayloadAction<UserState>) => {
+            state.name = action.payload.name;
+            state.email = action.payload.email;
+            state.isLogin = true;
+        },
+        // Скидання даних користувача при логауті
+        logout: () => initialState,
     }
 })
 
 export const userReducer = userSlice.reducer;
 export const selectUser = (state: RootState) => state.user;
-export const {isLogin} = userSlice.actions;
+export const {setUser, logout} = userSlice.actions;
