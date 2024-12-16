@@ -8,7 +8,6 @@ import { selectModal } from '../redux/modal/modalSlice.ts';
 import MenuUserModal from '../components/MenuUserModal.tsx';
 
 const Layout = () => {
-    // const registred = localStorage.getItem( 'Authenticated' );
     const openModal = useAppSelector(selectModal)
 
     return (
