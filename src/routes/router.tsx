@@ -8,6 +8,7 @@ import About from "../pages/About.tsx";
 import AdminPanel from '../pages/AdminPanel.tsx';
 import UserProfile from '../pages/UserProfile.tsx';
 import ProfileEdit from '../pages/ProfileEdit.tsx';
+import NotFound from "../pages/NotFound.tsx";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
     const isAuthenticated = true; // Замініть на реальну логіку перевірки
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
         path: '/admin/*',
         element: (<PrivateRoute><AdminPanel /></PrivateRoute>),
     },
+    {
+        path: '*',
+        element: <NotFound/>
+    }
 ])
 
 export default router
