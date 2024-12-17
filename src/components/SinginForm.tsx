@@ -22,7 +22,7 @@ const SinginForm = () => {
     } );
 
     const onSubmit = async ( data: FormData ) => {
-        dispatch(openModal(false))
+        dispatch(openModal( { isOpen: false, type: '' }))
         try {
             const result = await dispatch(loginThunk(data)).unwrap();
             reset();
@@ -46,7 +46,7 @@ const SinginForm = () => {
                 <InputStyled { ...register( 'password' ) } placeholder={ 'Password' } />
                 <p>{ errors.password?.message }</p>
                 <ButtonForm color={ '#1cb955' } text={ 'Увійти' } />
-                <p>Немає акаунту? <NavLinkStyled to={ '/register' }>Зареєструватися</NavLinkStyled></p>
+                <p>Немає акаунту? <span onClick={()=> { dispatch(openModal({isOpen: true, type: 'Register'})) }}>Зареєструватися</span></p>
             </FormStyled>
         </Wrapper>
     );

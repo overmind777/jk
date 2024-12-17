@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import ButtonHeader from '../shared/ButtonHeader.tsx';
 import { useAppDispatch, useAppSelector } from '../helpers/hooks.ts';
-import { openModal, selectModal } from '../redux/modal/modalSlice.ts';
+import { openModal } from '../redux/modal/modalSlice.ts';
 import { selectAuth } from '../redux/auth/selectors.ts';
 import { selectUser } from '../redux/user/userSlice.ts';
 import { UserState } from '../helpers/types.ts';
@@ -12,12 +12,9 @@ const Header = () => {
     const isAuthenticatedState = useAppSelector( selectAuth );
     const isAuthenticatedLocal = localStorage.getItem( 'Authenticated' );
     const user: UserState = useAppSelector( selectUser );
-    const {isOpen} = useAppSelector(selectModal)
 
     const handleClick = ( type: string ): void => {
-        if (!isOpen) {
             dispatch(openModal({ isOpen: true, type: type }));
-        }
     };
 
     const isAuthenticated = isAuthenticatedState.isAuthenticated || isAuthenticatedLocal;
@@ -57,7 +54,7 @@ export const Wrapper = styled.div`
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 10;
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
     letter-spacing: 0.5px;

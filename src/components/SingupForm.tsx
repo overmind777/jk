@@ -23,7 +23,7 @@ const SingupForm = () => {
     } );
 
     const onSubmit = async (data: FormData) => {
-        dispatch(openModal(false))
+        dispatch(openModal( { isOpen: false, type: '' }))
         try {
             const result = await dispatch(registerThunk(data)).unwrap();
             if (result) {
@@ -52,7 +52,9 @@ const SingupForm = () => {
                 <p>{ errors.password?.message }</p>
                 <ButtonForm color={ '#1cb955' } text={ 'Реєстрація'}/>
                 <ButtonForm color={ '#cccbc8' } text={ 'Google' }/>
-                <p>Вже є акаунт? <NavLinkStyled to={ '/login' }>Увійти</NavLinkStyled></p>
+                <p>Вже є акаунт? <span onClick={ () => {
+                    dispatch( openModal( { isOpen: true, type: 'Login' } ) );
+                } }>Увійти</span></p>
             </FormStyled>
         </Wrapper>
     );

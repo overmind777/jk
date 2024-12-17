@@ -4,7 +4,7 @@ import { RootState } from '../store.ts';
 
 const initialState: ModalState = {
     isOpen: false,
-    modalType: null,
+    modalType: '',
 };
 
 const modalSlice = createSlice( {
@@ -17,7 +17,7 @@ const modalSlice = createSlice( {
         },
         closeModal: (state) => {
             state.isOpen = false;
-            state.modalType = null;
+            state.modalType = '';
         },
     },
 } );

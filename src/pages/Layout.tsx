@@ -9,13 +9,19 @@ import MenuUserModal from '../components/MenuUserModal.tsx';
 
 const Layout = () => {
     const { isOpen, modalType } = useAppSelector( selectModal );
-    console.log( isOpen );
+    console.log(isOpen)
 
     // Об'єкт для рендерингу відповідних компонентів
     const modalContent: Record<string, JSX.Element> = {
         Login: <SinginForm />,
         Register: <SingupForm />,
         Menu: <MenuUserModal />,
+    };
+
+    const modalClasses: Record<string, string> = {
+        Login: 'modal-login',
+        Register: 'modal-register',
+        Menu: 'modal-menu',
     };
 
     return (
@@ -26,9 +32,9 @@ const Layout = () => {
             </div>
             { isOpen && (
                 <Modal
-                    className="modal-portal"
-                    contentClassName="modal-content"
-                    overlayClassName="modal-overlay"
+                    className={modalType ? modalClasses[modalType] : ''}
+                    contentClassName={`modal-content ${modalType ? modalClasses[modalType] : ''}`}
+                    overlayClassName={`modal-overlay ${modalType ? modalClasses[modalType] : ''}`}
                 >
                     { modalType && modalContent[modalType] }
                 </Modal>

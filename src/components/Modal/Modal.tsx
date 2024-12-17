@@ -6,10 +6,10 @@ import { ReactModalStyled } from './Modal.styled.ts';
 
 
 interface Props {
-    className?: string;
-    contentClassName?: string;
-    overlayClassName?: string;
-    children?: React.ReactNode;
+    className: string;
+    contentClassName: string;
+    overlayClassName: string;
+    children: React.ReactNode;
 }
 
 ReactModal.setAppElement( '#root' );
@@ -22,17 +22,18 @@ const Modal: React.FC<Props> = ( {
                                  }: Props ) => {
 
     const { isOpen } = useAppSelector( selectModal );
+    console.log(isOpen)
     const dispatch = useAppDispatch();
 
     return (
         <>
             <ReactModalStyled
-                portalClassName={className}
-                className={contentClassName}
-                overlayClassName={overlayClassName}
-                isOpen={isOpen} // Переконайся, що це коректний стан
-                onRequestClose={() => dispatch(openModal({ isOpen: false, type: '' }))}
-                shouldCloseOnOverlayClick={true}>
+                portalClassName={ className }
+                className={ contentClassName }
+                overlayClassName={ overlayClassName }
+                isOpen={ isOpen }
+                onRequestClose={ () => dispatch( openModal( { isOpen: false, type: '' } ) ) }
+                shouldCloseOnOverlayClick={ true }>
                 { children }
             </ReactModalStyled>
         </>

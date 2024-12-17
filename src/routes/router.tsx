@@ -5,8 +5,6 @@ import Trainings from "../pages/Trainings.tsx";
 import Trainers from "../pages/Trainers.tsx";
 import Services from "../pages/Services.tsx";
 import About from "../pages/About.tsx";
-import Login from "../pages/Login.tsx";
-import Registration from "../pages/Registration.tsx";
 import AdminPanel from '../pages/AdminPanel.tsx';
 import UserProfile from '../pages/UserProfile.tsx';
 import ProfileEdit from '../pages/ProfileEdit.tsx';
@@ -40,14 +38,6 @@ const router = createBrowserRouter([
             {
                 path: 'about',
                 element: <About/>,
-            },
-            {
-                path: 'login',
-                element: <Login/>,
-            },
-            {
-                path: 'register',
-                element: <Registration/>,
             },
             {
                 path: 'profile',

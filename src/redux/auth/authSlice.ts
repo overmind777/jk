@@ -19,7 +19,14 @@ const initialState: AuthState = {
 const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {},
+    reducers: {
+        logout: (state) => {
+            state.isAuthenticated = false;
+            state.user.name = '';
+            state.user.email = ''
+            state.user.tokens = { accessToken: '', refreshToken: '' };
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(registerThunk.fulfilled, (state, {payload}) => {
             state.user.name = payload.user.name
