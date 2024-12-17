@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import ButtonHeader from '../shared/ButtonHeader.tsx';
 import { useAppDispatch, useAppSelector } from '../helpers/hooks.ts';
-import { openModal } from '../redux/modal/modalSlice.ts';
+import { openModal, selectModal } from '../redux/modal/modalSlice.ts';
 import { selectAuth } from '../redux/auth/selectors.ts';
 import { selectUser } from '../redux/user/userSlice.ts';
 import { UserState } from '../helpers/types.ts';
@@ -12,17 +12,12 @@ const Header = () => {
     const isAuthenticatedState = useAppSelector( selectAuth );
     const isAuthenticatedLocal = localStorage.getItem( 'Authenticated' );
     const user: UserState = useAppSelector( selectUser );
+    const {isOpen} = useAppSelector(selectModal)
 
     const handleClick = ( type: string ): void => {
-        dispatch( openModal( { isOpen: true, type: type } ) );
-    };
-
-    const handleClickName = () => {
-        dispatch( openModal( { isOpen: true, type: 'menu' } ) );
-    };
-
-    const handleChangeTheme = () => {
-        // TODO: Implement localization or theme switching
+        if (!isOpen) {
+            dispatch(openModal({ isOpen: true, type: type }));
+        }
     };
 
     const isAuthenticated = isAuthenticatedState.isAuthenticated || isAuthenticatedLocal;
@@ -36,14 +31,14 @@ const Header = () => {
             <NavLinkStyled to={ '/about' }>Про нас</NavLinkStyled>
             <MenuWrapper>
                 { user.name ? (
-                    <ButtonHeader text={ user.name } onClick={ handleClickName } />
+                    <ButtonHeader text={ user.name } onClick={()=> handleClick('Menu') } />
                 ) : (
                     <ButtonHeader
                         text={ isAuthenticated ? 'Login' : 'Register' }
                         onClick={ () => handleClick( isAuthenticated ? 'Login' : 'Register' ) }
                     />
                 ) }
-                <ButtonHeader text={ 'UA' } onClick={ handleChangeTheme } />
+                <ButtonHeader text={ 'UA' } />
             </MenuWrapper>
         </Wrapper>
     );

@@ -1,22 +1,39 @@
 import ReactModal from 'react-modal';
 import React from 'react';
-import {useAppDispatch, useAppSelector} from '../../helpers/hooks.ts';
-import {openModal, selectModal} from '../../redux/modal/modalSlice.ts';
-import {ReactModalStyled} from "./Modal.styled.ts";
+import { useAppDispatch, useAppSelector } from '../../helpers/hooks.ts';
+import { openModal, selectModal } from '../../redux/modal/modalSlice.ts';
+import { ReactModalStyled } from './Modal.styled.ts';
 
-ReactModal.setAppElement('#root');
 
-const Modal = ({children}: { children: React.ReactNode }) => {
+interface Props {
+    className?: string;
+    contentClassName?: string;
+    overlayClassName?: string;
+    children?: React.ReactNode;
+}
 
-    const isOpen = useAppSelector(selectModal);
-    const dispatch = useAppDispatch()
+ReactModal.setAppElement( '#root' );
+
+const Modal: React.FC<Props> = ( {
+                                     children,
+                                     className,
+                                     contentClassName,
+                                     overlayClassName,
+                                 }: Props ) => {
+
+    const { isOpen } = useAppSelector( selectModal );
+    const dispatch = useAppDispatch();
 
     return (
         <>
             <ReactModalStyled
-                isOpen={isOpen.isOpen}
-                onRequestClose={() => dispatch(openModal(false))}>
-                {children}
+                portalClassName={className}
+                className={contentClassName}
+                overlayClassName={overlayClassName}
+                isOpen={isOpen} // Переконайся, що це коректний стан
+                onRequestClose={() => dispatch(openModal({ isOpen: false, type: '' }))}
+                shouldCloseOnOverlayClick={true}>
+                { children }
             </ReactModalStyled>
         </>
     );

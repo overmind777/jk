@@ -8,7 +8,15 @@ import { selectModal } from '../redux/modal/modalSlice.ts';
 import MenuUserModal from '../components/MenuUserModal.tsx';
 
 const Layout = () => {
-    const openModal = useAppSelector(selectModal)
+    const { isOpen, modalType } = useAppSelector( selectModal );
+    console.log( isOpen );
+
+    // Об'єкт для рендерингу відповідних компонентів
+    const modalContent: Record<string, JSX.Element> = {
+        Login: <SinginForm />,
+        Register: <SingupForm />,
+        Menu: <MenuUserModal />,
+    };
 
     return (
         <div>
@@ -16,7 +24,15 @@ const Layout = () => {
             <div>
                 <Outlet />
             </div>
-            {openModal && (<Modal>{ openModal.modalType === 'Login' ? ( <SinginForm /> ) : (openModal.modalType === 'Register' ? ( <SingupForm /> ) : (<MenuUserModal/>)) }</Modal>)}
+            { isOpen && (
+                <Modal
+                    className="modal-portal"
+                    contentClassName="modal-content"
+                    overlayClassName="modal-overlay"
+                >
+                    { modalType && modalContent[modalType] }
+                </Modal>
+            ) }
         </div>
     );
 };
