@@ -6,58 +6,55 @@ import Trainers from "../pages/Trainers.tsx";
 import Services from "../pages/Services.tsx";
 import About from "../pages/About.tsx";
 import AdminPanel from '../pages/AdminPanel.tsx';
-import UserProfile from '../pages/UserProfile.tsx';
 import ProfileEdit from '../pages/ProfileEdit.tsx';
 import NotFound from "../pages/NotFound.tsx";
+import Profile from "../pages/Profile.tsx";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-    const isAuthenticated = true; // Замініть на реальну логіку перевірки
-    return isAuthenticated ? children : <Navigate to="/login" />;
+    const isAuthenticated = sessionStorage.getItem( 'userData' ); // Перевірка токена
+    return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <Layout/>,
+        element: <Layout />,
         children: [
+            { index: true, element: <Home /> },
+            { path: 'trainings', element: <Trainings /> },
+            { path: 'trainers', element: <Trainers /> },
+            { path: 'services', element: <Services /> },
+            { path: 'about', element: <About /> },
             {
-                index: true,
-                element: <Home/>,
+                path: 'admin/*',
+                element: (
+                    <PrivateRoute>
+                        <AdminPanel />
+                    </PrivateRoute>
+                ),
             },
             {
-                path: 'trainings',
-                element: <Trainings/>,
+                path: 'user/*',
+                element: (
+                    <PrivateRoute>
+                        <Profile />
+                    </PrivateRoute>
+                ),
+                children: [
+                    {
+                        path: 'profile-edit',
+                        element: <ProfileEdit />,
+                    },
+                ],
             },
+            // 404 сторінка як дочірній маршрут Layout
             {
-                path: 'trainers',
-                element: <Trainers/>,
+                path: '*',
+                element: <NotFound />,
             },
-            {
-                path: 'services',
-                element: <Services/>,
-            },
-            {
-                path: 'about',
-                element: <About/>,
-            },
-            {
-                path: 'profile',
-                element: <UserProfile/>,
-            },
-            {
-                path: 'profileEdit',
-                element: <ProfileEdit/>,
-            }
-        ]
+        ],
     },
-    {
-        path: '/admin/*',
-        element: (<PrivateRoute><AdminPanel /></PrivateRoute>),
-    },
-    {
-        path: '*',
-        element: <NotFound/>
-    }
+
 ])
 
 export default router

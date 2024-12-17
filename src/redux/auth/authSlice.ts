@@ -13,6 +13,7 @@ const initialState: AuthState = {
     },
     isAuthenticated: false,
     isAdmin: false,
+    isLogin: true,
     error: '',
 }
 
@@ -32,8 +33,8 @@ const authSlice = createSlice({
             state.user.name = payload.user.name
             state.user.email = payload.user.email
             state.user.tokens = state.user.tokens || { accessToken: '', refreshToken: '' };
-            state.isAuthenticated = true;
             state.isAdmin = false;
+            state.isAuthenticated = true;
         })
             .addCase(loginThunk.fulfilled, (state, {payload}) => {
                 state.user.name = payload.user.name
@@ -41,7 +42,7 @@ const authSlice = createSlice({
 
                 state.user.tokens.accessToken = payload.tokens.accessToken
                 state.user.tokens.refreshToken = payload.tokens.refreshToken
-                state.isAuthenticated = true;
+                state.isLogin = true;
             })
             .addMatcher(isAnyOf(
                 registerThunk.rejected,

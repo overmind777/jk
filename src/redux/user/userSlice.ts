@@ -1,25 +1,38 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, isAnyOf, PayloadAction} from '@reduxjs/toolkit';
 import {RootState} from "../store.ts";
-import { UserState } from '../../helpers/types.ts';
+import {CustomResponse, UserState} from '../../helpers/types.ts';
+import {editUserData} from "./operations.ts";
 
 const initialState: UserState = {
     name: '',
+    city: '',
     email: '',
-    isLogin: false,
+    about: '',
+    error: '',
 }
 
 const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        // Встановлення даних користувача при логіні
         setUser: (state, action: PayloadAction<UserState>) => {
             state.name = action.payload.name;
             state.email = action.payload.email;
-            state.isLogin = true;
+
         },
-        // Скидання даних користувача при логауті
         logout: () => initialState,
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(editUserData.fulfilled, (state: UserState, {payload}: PayloadAction<CustomResponse>) => {
+                state.name = payload.name;
+                state.city = payload.city;
+                state.email = payload.email;
+                state.about = payload.about;
+            })
+            .addMatcher(isAnyOf(editUserData.rejected), (state: UserState, {payload}: PayloadAction<unknown>) => {
+                state.error = payload as string || 'Something went wrong. Please try again.';
+            })
     }
 })
 

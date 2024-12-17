@@ -29,7 +29,7 @@ const SinginForm = () => {
             navigate('/');
             if (result) {
                 sessionStorage.setItem('userData', JSON.stringify(result));
-                dispatch(setUser( { name: result.user.name, email: result.user.email, isLogin: true }))
+                dispatch(setUser( { name: result.user.name, email: result.user.email }))
             }
         } catch (error) {
             console.error("Registration failed:", error);

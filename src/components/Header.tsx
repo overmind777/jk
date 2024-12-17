@@ -1,23 +1,27 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import ButtonHeader from '../shared/ButtonHeader.tsx';
-import { useAppDispatch, useAppSelector } from '../helpers/hooks.ts';
+import { useAppDispatch } from '../helpers/hooks.ts';
 import { openModal } from '../redux/modal/modalSlice.ts';
-import { selectAuth } from '../redux/auth/selectors.ts';
-import { selectUser } from '../redux/user/userSlice.ts';
-import { UserState } from '../helpers/types.ts';
 
 const Header = () => {
     const dispatch = useAppDispatch();
-    const isAuthenticatedState = useAppSelector( selectAuth );
     const isAuthenticatedLocal = localStorage.getItem( 'Authenticated' );
-    const user: UserState = useAppSelector( selectUser );
+    // const user: UserState = useAppSelector( selectUser );
+    const userData = sessionStorage.getItem('userData');
+    let user = { name: '', email: '' }; // Значення за замовчуванням
+    if (userData) {
+        try {
+            const parsedData = JSON.parse(userData);
+            user = parsedData?.user || user; // Перевірка наявності user
+        } catch (error) {
+            console.error('Error parsing userData:', error);
+        }
+    }
 
     const handleClick = ( type: string ): void => {
             dispatch(openModal({ isOpen: true, type: type }));
     };
-
-    const isAuthenticated = isAuthenticatedState.isAuthenticated || isAuthenticatedLocal;
 
     return (
         <Wrapper>
@@ -31,8 +35,8 @@ const Header = () => {
                     <ButtonHeader text={ user.name } onClick={()=> handleClick('Menu') } />
                 ) : (
                     <ButtonHeader
-                        text={ isAuthenticated ? 'Login' : 'Register' }
-                        onClick={ () => handleClick( isAuthenticated ? 'Login' : 'Register' ) }
+                        text={ isAuthenticatedLocal ? 'Login' : 'Register' }
+                        onClick={ () => handleClick( isAuthenticatedLocal ? 'Login' : 'Register' ) }
                     />
                 ) }
                 <ButtonHeader text={ 'UA' } />

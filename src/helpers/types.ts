@@ -9,6 +9,14 @@ export interface ApiResponse {
     tokens: Tokens;
 }
 
+export interface CustomResponse {
+    name: string,
+    city: string,
+    email: string,
+    about: string,
+    error: string | null,
+}
+
 export interface RegisterCredentials {
     name: string;
     email: string;
@@ -29,6 +37,7 @@ export interface AuthState {
     user: User;
     isAuthenticated: boolean;
     isAdmin: boolean;
+    isLogin: boolean;
     error: string | null;
 }
 
@@ -40,6 +49,8 @@ export interface ModalState {
 export interface UserState {
     name: string;
     email: string;
-    isLogin: boolean;
+    city?: string;
+    about?: string;
+    error?: string | null;
 }
 
