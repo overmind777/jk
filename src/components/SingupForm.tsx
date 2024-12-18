@@ -44,8 +44,8 @@ const SingupForm = () => {
         <Wrapper>
             <h2>Реєстрація</h2>
             <FormStyled onSubmit={ handleSubmit( onSubmit ) }>
-                <InputStyled { ...register( 'name' ) } placeholder={ 'Name' }/>
-                <p>{ errors.name?.message }</p>
+                <InputStyled { ...register( 'username' ) } placeholder={ 'Name' }/>
+                <p>{ errors.username?.message }</p>
                 <InputStyled { ...register( 'email' ) } placeholder={ 'Email' }/>
                 <p>{ errors.email?.message }</p>
                 <InputStyled { ...register( 'password' ) } placeholder={ 'Password' }/>

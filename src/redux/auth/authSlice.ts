@@ -4,7 +4,7 @@ import {AuthState} from '../../helpers/types.ts';
 
 const initialState: AuthState = {
     user: {
-        name: '',
+        username: '',
         email: '',
         tokens: {
             accessToken: '',
@@ -23,25 +23,27 @@ const authSlice = createSlice({
     reducers: {
         logout: (state) => {
             state.isAuthenticated = false;
-            state.user.name = '';
+            state.user.username = '';
             state.user.email = ''
-            state.user.tokens = { accessToken: '', refreshToken: '' };
+            state.user.tokens = {accessToken: '', refreshToken: ''};
         },
     },
     extraReducers: (builder) => {
         builder.addCase(registerThunk.fulfilled, (state, {payload}) => {
-            state.user.name = payload.user.name
+            state.user.username = payload.user.username
             state.user.email = payload.user.email
-            state.user.tokens = state.user.tokens || { accessToken: '', refreshToken: '' };
+            state.user.tokens = state.user.tokens || {accessToken: '', refreshToken: ''};
             state.isAdmin = false;
             state.isAuthenticated = true;
         })
             .addCase(loginThunk.fulfilled, (state, {payload}) => {
-                state.user.name = payload.user.name
+                state.user.username = payload.user.username
                 state.user.email = payload.user.email
 
-                state.user.tokens.accessToken = payload.tokens.accessToken
-                state.user.tokens.refreshToken = payload.tokens.refreshToken
+                if (state.user.tokens) {
+                    state.user.tokens.accessToken = payload.tokens.accessToken
+                    state.user.tokens.refreshToken = payload.tokens.refreshToken
+                }
                 state.isLogin = true;
             })
             .addMatcher(isAnyOf(
