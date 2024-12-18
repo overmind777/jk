@@ -1,21 +1,18 @@
-import {createBrowserRouter, Navigate} from "react-router-dom";
-import Layout from "../pages/Layout.tsx";
-import Home from "../pages/Home.tsx";
-import Trainings from "../pages/Trainings.tsx";
-import Trainers from "../pages/Trainers.tsx";
-import Services from "../pages/Services.tsx";
-import About from "../pages/About.tsx";
+import { createBrowserRouter } from 'react-router-dom';
+import Layout from '../pages/Layout.tsx';
+import Home from '../pages/Home.tsx';
+import Trainings from '../pages/Trainings.tsx';
+import Trainers from '../pages/Trainers.tsx';
+import Services from '../pages/Services.tsx';
+import About from '../pages/About.tsx';
 import AdminPanel from '../pages/AdminPanel.tsx';
 import ProfileEdit from '../pages/ProfileEdit.tsx';
-import NotFound from "../pages/NotFound.tsx";
-import Profile from "../pages/Profile.tsx";
+import NotFound from '../pages/NotFound.tsx';
+import Profile from '../pages/Profile.tsx';
+import LoginError from '../pages/LoginError.tsx';
+import PrivateRoute from '../components/PrivateRoute.tsx';
 
-const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-    const isAuthenticated = sessionStorage.getItem( 'userData' ); // Перевірка токена
-    return isAuthenticated ? children : <Navigate to="/login" replace />;
-};
-
-const router = createBrowserRouter([
+const router = createBrowserRouter( [
     {
         path: '/',
         element: <Layout />,
@@ -25,6 +22,7 @@ const router = createBrowserRouter([
             { path: 'trainers', element: <Trainers /> },
             { path: 'services', element: <Services /> },
             { path: 'about', element: <About /> },
+            { path: 'login-error', element: <LoginError /> },
             {
                 path: 'admin/*',
                 element: (
@@ -55,6 +53,6 @@ const router = createBrowserRouter([
         ],
     },
 
-])
+] );
 
-export default router
+export default router;

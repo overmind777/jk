@@ -9,7 +9,6 @@ import MenuUserModal from '../components/MenuUserModal.tsx';
 
 const Layout = () => {
     const { isOpen, modalType } = useAppSelector( selectModal );
-    console.log(isOpen)
 
     // Об'єкт для рендерингу відповідних компонентів
     const modalContent: Record<string, JSX.Element> = {

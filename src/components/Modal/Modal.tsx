@@ -22,7 +22,6 @@ const Modal: React.FC<Props> = ( {
                                  }: Props ) => {
 
     const { isOpen } = useAppSelector( selectModal );
-    console.log(isOpen)
     const dispatch = useAppDispatch();
 
     return (

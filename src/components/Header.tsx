@@ -1,26 +1,30 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import ButtonHeader from '../shared/ButtonHeader.tsx';
-import { useAppDispatch } from '../helpers/hooks.ts';
+import { useAppDispatch, useAppSelector } from '../helpers/hooks.ts';
 import { openModal } from '../redux/modal/modalSlice.ts';
+import { UserState } from '../helpers/types.ts';
+import { selectUser } from '../redux/user/userSlice.ts';
 
 const Header = () => {
     const dispatch = useAppDispatch();
     const isAuthenticatedLocal = localStorage.getItem( 'Authenticated' );
-    // const user: UserState = useAppSelector( selectUser );
-    const userData = sessionStorage.getItem('userData');
-    let user = { name: '', email: '' }; // Значення за замовчуванням
+    console.log(isAuthenticatedLocal)
+    let user: UserState = useAppSelector( selectUser );
+    const userData = sessionStorage.getItem( 'userData' );
+
     if (userData) {
         try {
-            const parsedData = JSON.parse(userData);
+            const parsedData = JSON.parse( userData );
             user = parsedData?.user || user; // Перевірка наявності user
         } catch (error) {
-            console.error('Error parsing userData:', error);
+            console.error( 'Error parsing userData:', error );
         }
     }
 
+
     const handleClick = ( type: string ): void => {
-            dispatch(openModal({ isOpen: true, type: type }));
+        dispatch( openModal( { isOpen: true, type: type } ) );
     };
 
     return (
@@ -31,8 +35,8 @@ const Header = () => {
             <NavLinkStyled to={ '/services' }>Послуги</NavLinkStyled>
             <NavLinkStyled to={ '/about' }>Про нас</NavLinkStyled>
             <MenuWrapper>
-                { user.name ? (
-                    <ButtonHeader text={ user.name } onClick={()=> handleClick('Menu') } />
+                { user.username ? (
+                    <ButtonHeader text={ user.username } onClick={ () => handleClick( 'Menu' ) } />
                 ) : (
                     <ButtonHeader
                         text={ isAuthenticatedLocal ? 'Login' : 'Register' }

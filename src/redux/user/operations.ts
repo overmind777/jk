@@ -1,18 +1,28 @@
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import { CustomResponse, RegisterCredentials} from "../../helpers/types.ts";
-import {userApi} from "../auth/operations.ts";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { UserState } from '../../helpers/types.ts';
+import { userApi } from '../auth/operations.ts';
+import { AppDispatch, RootState } from '../store.ts';
 
-export const editUserData = createAsyncThunk<CustomResponse, RegisterCredentials>(
+export interface AsyncThunkConfig {
+    state: RootState;
+    dispatch: AppDispatch;
+    rejectValue: string;
+}
+
+export const editUserData = createAsyncThunk<
+    UserState,
+    { email: string, userData: Partial<UserState> },
+    AsyncThunkConfig>(
     'editUserData',
-    async (credentials, thunkApi) => {
-        try{
-            console.log(credentials)
-            const {data} = await userApi.post('/user/edit', credentials)
-            return data
+    async ( { email, userData }, thunkApi ) => {
+        try {
+            console.log( userData );
+            const { data } = await userApi.patch( '/users/edit', { email, userData } );
+            return data;
         } catch (error) {
-            if (error instanceof Error && typeof error.message === "string") {
-                return thunkApi.rejectWithValue(error.message);
+            if (error instanceof Error && typeof error.message === 'string') {
+                return thunkApi.rejectWithValue( error.message );
             }
         }
-    }
-)
+    },
+);

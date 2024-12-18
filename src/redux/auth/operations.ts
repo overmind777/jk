@@ -9,8 +9,11 @@ export const userApi = axios.create({
 export const registerThunk = createAsyncThunk <ApiResponse, RegisterCredentials>(
     'register',
     async (credentials, thunkApi) => {
+        console.log(credentials)
         try {
             const {data} = await userApi.post('/auth/register', credentials)
+            const dataUser = await userApi.post('/auth/users/users-data', credentials)
+            console.log(dataUser)
             return data
         } catch (error) {
             if (error instanceof Error && typeof error.message === "string") {

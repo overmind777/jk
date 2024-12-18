@@ -1,41 +1,42 @@
-import {createSlice, isAnyOf, PayloadAction} from '@reduxjs/toolkit';
-import {RootState} from "../store.ts";
-import {CustomResponse, UserState} from '../../helpers/types.ts';
-import {editUserData} from "./operations.ts";
+import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store.ts';
+import { User, UserState } from '../../helpers/types.ts';
+import { editUserData } from './operations.ts';
 
 const initialState: UserState = {
-    name: '',
-    city: '',
+    username: '',
+    certificateNumber: '',
     email: '',
-    about: '',
+    bio: '',
+    location: '',
+    website: '',
+    links: [{ link: '', url: '' }],
     error: '',
-}
+};
 
-const userSlice = createSlice({
-    name: "user",
+const userSlice = createSlice( {
+    name: 'user',
     initialState,
     reducers: {
-        setUser: (state, action: PayloadAction<UserState>) => {
-            state.name = action.payload.name;
+        setUser: ( state, action: PayloadAction<User> ) => {
+            state.username = action.payload.username;
             state.email = action.payload.email;
 
         },
         logout: () => initialState,
     },
-    extraReducers: (builder) => {
+    extraReducers: ( builder ) => {
         builder
-            .addCase(editUserData.fulfilled, (state: UserState, {payload}: PayloadAction<CustomResponse>) => {
-                state.name = payload.name;
-                state.city = payload.city;
-                state.email = payload.email;
-                state.about = payload.about;
-            })
-            .addMatcher(isAnyOf(editUserData.rejected), (state: UserState, {payload}: PayloadAction<unknown>) => {
+            .addCase( editUserData.fulfilled, ( state: UserState, { payload }: PayloadAction<UserState> ) => {
+                Object.assign( state, payload );
+                state.error = '';
+            } )
+            .addMatcher( isAnyOf( editUserData.rejected ), ( state: UserState, { payload }: PayloadAction<unknown> ) => {
                 state.error = payload as string || 'Something went wrong. Please try again.';
-            })
-    }
-})
+            } );
+    },
+} );
 
 export const userReducer = userSlice.reducer;
-export const selectUser = (state: RootState) => state.user;
-export const {setUser, logout} = userSlice.actions;
+export const selectUser = ( state: RootState ) => state.user;
+export const { setUser, logout } = userSlice.actions;

@@ -1,7 +1,7 @@
 export interface User {
-    name: string;
+    username: string;
     email: string;
-    tokens: Tokens;
+    tokens?: Tokens;
 }
 
 export interface ApiResponse {
@@ -9,16 +9,8 @@ export interface ApiResponse {
     tokens: Tokens;
 }
 
-export interface CustomResponse {
-    name: string,
-    city: string,
-    email: string,
-    about: string,
-    error: string | null,
-}
-
 export interface RegisterCredentials {
-    name: string;
+    username: string;
     email: string;
     password: string;
 }
@@ -47,10 +39,13 @@ export interface ModalState {
 }
 
 export interface UserState {
-    name: string;
+    username: string;
+    certificateNumber: string;
     email: string;
-    city?: string;
-    about?: string;
-    error?: string | null;
+    bio: string;
+    location: string;
+    website: string;
+    links: { link: string, url: string }[];
+    error: string;
 }
 

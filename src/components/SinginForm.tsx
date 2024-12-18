@@ -25,11 +25,12 @@ const SinginForm = () => {
         dispatch(openModal( { isOpen: false, type: '' }))
         try {
             const result = await dispatch(loginThunk(data)).unwrap();
+            console.log('result', result)
             reset();
             navigate('/');
             if (result) {
                 sessionStorage.setItem('userData', JSON.stringify(result));
-                dispatch(setUser( { name: result.user.name, email: result.user.email }))
+                dispatch(setUser( { username: result.user.username, email: result.user.email }))
             }
         } catch (error) {
             console.error("Registration failed:", error);
