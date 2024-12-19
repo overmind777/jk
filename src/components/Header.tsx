@@ -9,7 +9,6 @@ import { selectUser } from '../redux/user/userSlice.ts';
 const Header = () => {
     const dispatch = useAppDispatch();
     const isAuthenticatedLocal = localStorage.getItem( 'Authenticated' );
-    console.log(isAuthenticatedLocal)
     let user: UserState = useAppSelector( selectUser );
     const userData = sessionStorage.getItem( 'userData' );
 
@@ -21,7 +20,6 @@ const Header = () => {
             console.error( 'Error parsing userData:', error );
         }
     }
-
 
     const handleClick = ( type: string ): void => {
         dispatch( openModal( { isOpen: true, type: type } ) );
@@ -35,14 +33,13 @@ const Header = () => {
             <NavLinkStyled to={ '/services' }>Послуги</NavLinkStyled>
             <NavLinkStyled to={ '/about' }>Про нас</NavLinkStyled>
             <MenuWrapper>
-                { user.username ? (
-                    <ButtonHeader text={ user.username } onClick={ () => handleClick( 'Menu' ) } />
-                ) : (
-                    <ButtonHeader
-                        text={ isAuthenticatedLocal ? 'Login' : 'Register' }
-                        onClick={ () => handleClick( isAuthenticatedLocal ? 'Login' : 'Register' ) }
-                    />
-                ) }
+                { isAuthenticatedLocal ?
+                    ( user.username ?
+                        ( <ButtonHeader text={ user.username } onClick={ () => handleClick( 'Menu' ) } /> )
+                        :
+                        ( <ButtonHeader text={ 'Login' } onClick={ () => handleClick( 'Login' ) } /> ) )
+                    :
+                    ( <ButtonHeader text={ 'Register' } onClick={ () => handleClick( 'Register' ) } /> ) }
                 <ButtonHeader text={ 'UA' } />
             </MenuWrapper>
         </Wrapper>

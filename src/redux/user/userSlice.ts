@@ -1,7 +1,7 @@
 import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store.ts';
 import { User, UserState } from '../../helpers/types.ts';
-import { editUserData } from './operations.ts';
+import { createUserData, editUserData } from './operations.ts';
 
 const initialState: UserState = {
     username: '',
@@ -27,11 +27,14 @@ const userSlice = createSlice( {
     },
     extraReducers: ( builder ) => {
         builder
+            .addCase( createUserData.fulfilled, (state: UserState, {payload}: PayloadAction<UserState>)=>{
+                state.email = payload.email
+            })
             .addCase( editUserData.fulfilled, ( state: UserState, { payload }: PayloadAction<UserState> ) => {
                 Object.assign( state, payload );
                 state.error = '';
             } )
-            .addMatcher( isAnyOf( editUserData.rejected ), ( state: UserState, { payload }: PayloadAction<unknown> ) => {
+            .addMatcher( isAnyOf( editUserData.rejected, createUserData.rejected ), ( state: UserState, { payload }: PayloadAction<unknown> ) => {
                 state.error = payload as string || 'Something went wrong. Please try again.';
             } );
     },

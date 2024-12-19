@@ -8,7 +8,7 @@ const Profile = () => {
 
     const handleClick = () => {
         setPageState(false);
-        navigate('/user/profile-edit'); // Перехід до дочірнього маршруту
+        navigate('/profile/profile-edit'); // Перехід до дочірнього маршруту
     };
 
     return (

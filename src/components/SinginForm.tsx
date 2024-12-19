@@ -25,16 +25,15 @@ const SinginForm = () => {
         dispatch(openModal( { isOpen: false, type: '' }))
         try {
             const result = await dispatch(loginThunk(data)).unwrap();
-            console.log('result', result)
             reset();
             navigate('/');
             if (result) {
+                localStorage.setItem("Authenticated", "true");
                 sessionStorage.setItem('userData', JSON.stringify(result));
-                dispatch(setUser( { username: result.user.username, email: result.user.email }))
+                dispatch(setUser( { tokens: {accessToken: '', refreshToken: ''}, username: result.user.username, email: result.user.email }))
             }
         } catch (error) {
             console.error("Registration failed:", error);
-            localStorage.setItem("Authenticated", "false");
         }
     };
 

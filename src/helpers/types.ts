@@ -1,12 +1,11 @@
 export interface User {
     username: string;
     email: string;
-    tokens?: Tokens;
+    tokens: Tokens;
 }
 
 export interface ApiResponse {
     user: User;
-    tokens: Tokens;
 }
 
 export interface RegisterCredentials {

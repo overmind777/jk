@@ -4,6 +4,7 @@ import {useAppDispatch} from '../helpers/hooks.ts';
 import {closeModal} from '../redux/modal/modalSlice.ts';
 import {logout} from '../redux/user/userSlice.ts';
 import React from "react";
+import { createUserData } from '../redux/user/operations.ts';
 
 const MenuUserModal = () => {
     const dispatch = useAppDispatch();
@@ -14,7 +15,9 @@ const MenuUserModal = () => {
     const handleClickProfile = () =>{
         if (userData){
             const {user} = JSON.parse(userData)
-            dispatch()
+            dispatch(createUserData(user.email))
+            navigate('/profile')
+            dispatch(closeModal())
         }
     }
 
@@ -33,7 +36,7 @@ const MenuUserModal = () => {
     return (
         <ModalMenuStyled>
             <ul>
-                <li><Link to={'/user'} onClick={handleClickProfile}><p>Профіль</p></Link></li>
+                <li><Link to={'/profile'} onClick={handleClickProfile}><p>Профіль</p></Link></li>
                 <li><Link to={'/settings'} onClick={handleClick}><p>Налаштування</p></Link></li>
                 <li>
                     <p onClick={handleClick}>Вийти</p>

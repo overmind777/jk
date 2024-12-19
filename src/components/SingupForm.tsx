@@ -31,11 +31,10 @@ const SingupForm = () => {
                 reset();
                 navigate( '/' );
             } else {
-                localStorage.setItem("Authenticated", "false");
+                localStorage.removeItem("Authenticated");
             }
         } catch (error) {
             console.error("Registration failed:", error);
-            localStorage.setItem("Authenticated", "false");
         }
     };
 
