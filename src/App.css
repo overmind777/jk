@@ -40,3 +40,40 @@
 .read-the-docs {
   color: #888;
 }
+
+.modal-login,
+.modal-register,
+.modal-menu {
+  position: absolute;
+  width: 100vw; /* Вся ширина вікна */
+  height: 100vh; /* Вся висота вікна */
+  z-index: 100; /* Встановлює пріоритет для модального вікна */
+}
+
+.modal-register.modal-content,
+.modal-login.modal-content {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-table;
+  width: 500px;
+}
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* Напівпрозорий фон */
+  z-index: 999; /* Встановлює пріоритет для фону */
+}
+
+.modal-content {
+  width: 200px;
+  height: 100px;
+  z-index: 1000; /* Найвищий пріоритет для вмісту модального вікна */
+  top: 60px;
+  right: 100px;
+}
+
+.modal-menu.modal-content {
+  display: inline-table;
+}
+

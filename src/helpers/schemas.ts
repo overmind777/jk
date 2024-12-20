@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export const registerSchema = yup.object( {
-    name: yup.string().min( 1, "Name must contain more than 1 character" )
+    username: yup.string().min( 1, "Name must contain more than 1 character" )
         .max( 32, "Name must contain less than 32" ).required(),
     email: yup.string().email( "Email is not valid" ).required( "Email is required" ).matches(
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/,

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import {NavLink, useNavigate} from 'react-router-dom';
-import {useAppDispatch, useAppSelector} from '../helpers/hooks.ts';
+import {useAppDispatch} from '../helpers/hooks.ts';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {loginThunk} from '../redux/auth/operations.ts';
@@ -9,33 +9,31 @@ import {InputStyled} from './SingupForm.tsx';
 import * as yup from 'yup';
 import {openModal} from '../redux/modal/modalSlice.ts';
 import ButtonForm from '../shared/ButtonForm.tsx';
-import {selectUser} from "../redux/user/userSlice.ts";
+import { setUser } from '../redux/user/userSlice.ts';
 
 type FormData = yup.InferType<typeof loginSchema>;
 
 const SinginForm = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const select = useAppSelector(selectUser)
 
     const { register, reset, handleSubmit, formState: { errors } } = useForm<FormData>( {
         resolver: yupResolver( loginSchema ),
     } );
 
     const onSubmit = async ( data: FormData ) => {
-        dispatch(openModal(false))
+        dispatch(openModal( { isOpen: false, type: '' }))
         try {
             const result = await dispatch(loginThunk(data)).unwrap();
             reset();
             navigate('/');
             if (result) {
-                console.log('ok')
-                sessionStorage.setItem('accessToken', result.tokens.accessToken);
-                select.user.isLogin = true;
+                localStorage.setItem("Authenticated", "true");
+                sessionStorage.setItem('userData', JSON.stringify(result));
+                dispatch(setUser( { tokens: {accessToken: '', refreshToken: ''}, username: result.user.username, email: result.user.email }))
             }
         } catch (error) {
             console.error("Registration failed:", error);
-            localStorage.setItem("Authenticated", "false");
         }
     };
 
@@ -48,7 +46,7 @@ const SinginForm = () => {
                 <InputStyled { ...register( 'password' ) } placeholder={ 'Password' } />
                 <p>{ errors.password?.message }</p>
                 <ButtonForm color={ '#1cb955' } text={ 'Увійти' } />
-                <p>Немає акаунту? <NavLinkStyled to={ '/register' }>Зареєструватися</NavLinkStyled></p>
+                <p>Немає акаунту? <span onClick={()=> { dispatch(openModal({isOpen: true, type: 'Register'})) }}>Зареєструватися</span></p>
             </FormStyled>
         </Wrapper>
     );

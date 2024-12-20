@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from "../helpers/hooks.ts";
 import { registerThunk } from "../redux/auth/operations.ts";
 import { registerSchema } from "../helpers/schemas.ts";
-import { openModal } from '../redux/modal/modalSlice.ts';
+import {closeModal, openModal} from '../redux/modal/modalSlice.ts';
 
 import styled from "styled-components";
 import ButtonForm from '../shared/ButtonForm.tsx';
@@ -23,19 +23,18 @@ const SingupForm = () => {
     } );
 
     const onSubmit = async (data: FormData) => {
-        dispatch(openModal(false))
+        dispatch(closeModal())
         try {
-            const result = await dispatch(registerThunk(data)).unwrap();
+            const result = await dispatch(registerThunk(data))//.unwrap();
             if (result) {
                 localStorage.setItem("Authenticated", "true");
                 reset();
                 navigate( '/' );
             } else {
-                localStorage.setItem("Authenticated", "false");
+                localStorage.removeItem("Authenticated");
             }
         } catch (error) {
-            console.error("Registration failed:", error);
-            localStorage.setItem("Authenticated", "false");
+            console.log(error);
         }
     };
 
@@ -44,15 +43,17 @@ const SingupForm = () => {
         <Wrapper>
             <h2>Реєстрація</h2>
             <FormStyled onSubmit={ handleSubmit( onSubmit ) }>
-                <InputStyled { ...register( 'name' ) } placeholder={ 'Name' }/>
-                <p>{ errors.name?.message }</p>
+                <InputStyled { ...register( 'username' ) } placeholder={ 'Name' }/>
+                <p>{ errors.username?.message }</p>
                 <InputStyled { ...register( 'email' ) } placeholder={ 'Email' }/>
                 <p>{ errors.email?.message }</p>
                 <InputStyled { ...register( 'password' ) } placeholder={ 'Password' }/>
                 <p>{ errors.password?.message }</p>
                 <ButtonForm color={ '#1cb955' } text={ 'Реєстрація'}/>
                 <ButtonForm color={ '#cccbc8' } text={ 'Google' }/>
-                <p>Вже є акаунт? <NavLinkStyled to={ '/login' }>Увійти</NavLinkStyled></p>
+                <p>Вже є акаунт? <span onClick={ () => {
+                    dispatch( openModal( { isOpen: true, type: 'Login' } ) );
+                } }>Увійти</span></p>
             </FormStyled>
         </Wrapper>
     );

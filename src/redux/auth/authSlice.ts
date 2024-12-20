@@ -1,48 +1,61 @@
 import {createSlice, isAnyOf, PayloadAction} from '@reduxjs/toolkit';
 import {loginThunk, registerThunk} from './operations.ts';
-import {AuthState} from '../../helpers/types.ts';
+import {AuthState, Tokens, User} from '../../helpers/types.ts';
 
 const initialState: AuthState = {
     user: {
-        name: '',
+        username: '',
         email: '',
-        tokens: {
-            accessToken: '',
-            refreshToken: '',
-        },
+    },
+    tokens: {
+        accessToken: '',
+        refreshToken: '',
     },
     isAuthenticated: false,
     isAdmin: false,
-    error: '',
-}
+    isLogin: true,
+    error: null,
+};
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {},
+    reducers: {
+        logout: (state) => {
+            state.isAuthenticated = false;
+            state.user.username = '';
+            state.user.email = '';
+            state.tokens = {accessToken: '', refreshToken: ''};
+        },
+    },
     extraReducers: (builder) => {
-        builder.addCase(registerThunk.fulfilled, (state, {payload}) => {
-            state.user.name = payload.user.name
-            state.user.email = payload.user.email
-            state.user.tokens = state.user.tokens || { accessToken: '', refreshToken: '' };
-            state.isAuthenticated = true;
+        builder.addCase(registerThunk.fulfilled, (state, {payload}: PayloadAction<User>) => {
+            state.user.username = payload.username;
+            state.user.email = payload.email;
             state.isAdmin = false;
+            state.isAuthenticated = true;
         })
-            .addCase(loginThunk.fulfilled, (state, {payload}) => {
-                state.user.name = payload.user.name
-                state.user.email = payload.user.email
+            .addCase(loginThunk.fulfilled, (state, {payload}: PayloadAction<Tokens>) => {
 
-                state.user.tokens.accessToken = payload.tokens.accessToken
-                state.user.tokens.refreshToken = payload.tokens.refreshToken
-                state.isAuthenticated = true;
+                state.tokens.accessToken = payload.accessToken;
+                state.tokens.refreshToken = payload.refreshToken;
+                state.isLogin = true;
             })
             .addMatcher(isAnyOf(
                 registerThunk.rejected,
                 loginThunk.rejected,
-            ), (state, action: PayloadAction<unknown>) => {
-                state.error = action.payload as string || 'Something went wrong. Please try again.';
+            ), (state, {payload}: PayloadAction<unknown>) => {
+                console.log(payload);
+                state.error = payload as string || 'An unexpected error occurred';
+                state.isAuthenticated = false;
             })
-    }
-})
+            .addMatcher(isAnyOf(
+                registerThunk.pending,
+                loginThunk.pending,
+            ), (state) => {
+                state.error = null;
+            });
+    },
+});
 
 export const authReducer = authSlice.reducer;
