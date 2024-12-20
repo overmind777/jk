@@ -1,12 +1,8 @@
 export interface User {
     username: string;
     email: string;
-    tokens: Tokens;
 }
 
-export interface ApiResponse {
-    user: User;
-}
 
 export interface RegisterCredentials {
     username: string;
@@ -19,6 +15,11 @@ export interface LoginCredentials {
     password: string;
 }
 
+export interface ApiError {
+    message: string;
+    statusCode: number;
+}
+
 export interface Tokens {
     accessToken: string;
     refreshToken: string;
@@ -26,6 +27,7 @@ export interface Tokens {
 
 export interface AuthState {
     user: User;
+    tokens: Tokens;
     isAuthenticated: boolean;
     isAdmin: boolean;
     isLogin: boolean;

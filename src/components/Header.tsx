@@ -5,11 +5,14 @@ import { useAppDispatch, useAppSelector } from '../helpers/hooks.ts';
 import { openModal } from '../redux/modal/modalSlice.ts';
 import { UserState } from '../helpers/types.ts';
 import { selectUser } from '../redux/user/userSlice.ts';
+import {selectAuth} from "../redux/auth/selectors.ts";
 
 const Header = () => {
     const dispatch = useAppDispatch();
-    const isAuthenticatedLocal = localStorage.getItem( 'Authenticated' );
     let user: UserState = useAppSelector( selectUser );
+    const auth = useAppSelector( selectAuth );
+
+    const isAuthenticatedLocal = localStorage.getItem( 'Authenticated' );
     const userData = sessionStorage.getItem( 'userData' );
 
     if (userData) {
@@ -33,7 +36,8 @@ const Header = () => {
             <NavLinkStyled to={ '/services' }>Послуги</NavLinkStyled>
             <NavLinkStyled to={ '/about' }>Про нас</NavLinkStyled>
             <MenuWrapper>
-                { isAuthenticatedLocal ?
+                //TODO logic for first downloads page
+                { isAuthenticatedLocal ||  auth.isAuthenticated ?
                     ( user.username ?
                         ( <ButtonHeader text={ user.username } onClick={ () => handleClick( 'Menu' ) } /> )
                         :

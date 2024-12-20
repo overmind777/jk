@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from "../helpers/hooks.ts";
 import { registerThunk } from "../redux/auth/operations.ts";
 import { registerSchema } from "../helpers/schemas.ts";
-import { openModal } from '../redux/modal/modalSlice.ts';
+import {closeModal, openModal} from '../redux/modal/modalSlice.ts';
 
 import styled from "styled-components";
 import ButtonForm from '../shared/ButtonForm.tsx';
@@ -23,9 +23,9 @@ const SingupForm = () => {
     } );
 
     const onSubmit = async (data: FormData) => {
-        dispatch(openModal( { isOpen: false, type: '' }))
+        dispatch(closeModal())
         try {
-            const result = await dispatch(registerThunk(data)).unwrap();
+            const result = await dispatch(registerThunk(data))//.unwrap();
             if (result) {
                 localStorage.setItem("Authenticated", "true");
                 reset();
@@ -34,7 +34,7 @@ const SingupForm = () => {
                 localStorage.removeItem("Authenticated");
             }
         } catch (error) {
-            console.error("Registration failed:", error);
+            console.log(error);
         }
     };
 
