@@ -6,6 +6,7 @@ import SingupForm from '../components/SingupForm.tsx';
 import { useAppSelector } from '../helpers/hooks.ts';
 import { selectModal } from '../redux/modal/modalSlice.ts';
 import MenuUserModal from '../components/MenuUserModal.tsx';
+import {ToastContainer} from "react-toastify";
 
 const Layout = () => {
     const { isOpen, modalType } = useAppSelector( selectModal );
@@ -28,6 +29,7 @@ const Layout = () => {
             <Header />
             <div>
                 <Outlet />
+                <ToastContainer />
             </div>
             { isOpen && (
                 <Modal

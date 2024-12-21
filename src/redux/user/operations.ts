@@ -11,13 +11,17 @@ export interface AsyncThunkConfig {
 
 export const createUserData = createAsyncThunk<
     UserState,
-    { email: string },
+    { token: string },
     AsyncThunkConfig
 >(
     'createUserData',
-    async ( email, thunkApi ) => {
+    async ( token, thunkApi ) => {
         try {
-            const { data } = await userApi.post( '/users/create', { email } );
+            const { data } = await userApi.post( '/users/create', null, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            } );
             return data;
         } catch (error) {
             if (error instanceof Error && typeof error.message === 'string') {

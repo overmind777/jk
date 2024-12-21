@@ -6,7 +6,7 @@ export const userApi = axios.create({
     baseURL: "http://localhost:3000",
 })
 
-export const registerThunk = createAsyncThunk <User, RegisterCredentials>(
+export const registerThunk = createAsyncThunk<User, RegisterCredentials>(
     'register',
     async (credentials, thunkApi) => {
         try {
@@ -26,7 +26,7 @@ export const registerThunk = createAsyncThunk <User, RegisterCredentials>(
 export const loginThunk = createAsyncThunk<Tokens, LoginCredentials>(
     'login',
     async (credential, thunkApi) => {
-        try{
+        try {
             const {data} = await userApi.post('/auth/login', credential)
             return data
         } catch (error) {
@@ -39,3 +39,26 @@ export const loginThunk = createAsyncThunk<Tokens, LoginCredentials>(
         }
     }
 )
+
+export const logoutThunk = createAsyncThunk<{ message: string }, string>(
+    'logout',
+    async (credential, thunkApi) => {
+        try {
+            const {data} = await userApi.post('/auth/logout', null, {
+                headers: {
+                    Authorization: `Bearer ${credential}`,
+                },
+            })
+            return data
+        } catch
+            (error) {
+            if (error instanceof AxiosError && error.response) {
+                return thunkApi.rejectWithValue(error.response.data as ApiError);
+            }
+            return thunkApi.rejectWithValue({
+                message: 'An unexpected error occurred',
+            });
+        }
+    }
+)
+

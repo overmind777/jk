@@ -1,8 +1,11 @@
 import { Navigate } from 'react-router-dom';
+import {useAppSelector} from "../helpers/hooks.ts";
+import {selectAuthUser} from "../redux/auth/selectors.ts";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-    const isAuthenticated = sessionStorage.getItem( 'userData' );
-    return isAuthenticated ? children : <Navigate to="/login-error" replace />;
+    const {isLogin} = useAppSelector(selectAuthUser)
+    console.log("PrivateRoute", isLogin)
+    return isLogin ? children : <Navigate to="/login-error" replace />;
 };
 
 export default PrivateRoute

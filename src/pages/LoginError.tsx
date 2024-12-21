@@ -5,6 +5,7 @@ const LoginError = () => {
         <Wrapper>
             <h2>'Для перегляду потрібно виконати вхід'</h2>
             <button>Login</button>
+            <button>Home</button>
         </Wrapper>
     );
 };

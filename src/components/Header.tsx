@@ -1,53 +1,39 @@
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import styled from 'styled-components';
 import ButtonHeader from '../shared/ButtonHeader.tsx';
-import { useAppDispatch, useAppSelector } from '../helpers/hooks.ts';
-import { openModal } from '../redux/modal/modalSlice.ts';
-import { UserState } from '../helpers/types.ts';
-import { selectUser } from '../redux/user/userSlice.ts';
-import {selectAuth} from "../redux/auth/selectors.ts";
+import {useAppDispatch, useAppSelector} from '../helpers/hooks.ts';
+import {openModal} from '../redux/modal/modalSlice.ts';
+import {selectAuthUser} from "../redux/auth/selectors.ts";
 
 const Header = () => {
     const dispatch = useAppDispatch();
-    let user: UserState = useAppSelector( selectUser );
-    const auth = useAppSelector( selectAuth );
+    const {isLogin, user} = useAppSelector(selectAuthUser);
+    console.log(user)
 
-    const isAuthenticatedLocal = localStorage.getItem( 'Authenticated' );
-    const userData = sessionStorage.getItem( 'userData' );
-
-    if (userData) {
-        try {
-            const parsedData = JSON.parse( userData );
-            user = parsedData?.user || user; // Перевірка наявності user
-        } catch (error) {
-            console.error( 'Error parsing userData:', error );
-        }
-    }
-
-    const handleClick = ( type: string ): void => {
-        dispatch( openModal( { isOpen: true, type: type } ) );
+    const handleClick = (type: string): void => {
+        dispatch(openModal({isOpen: true, type: type}));
     };
 
     return (
         <Wrapper>
-            <NavLinkStyled to={ '/' }>Головна</NavLinkStyled>
-            <NavLinkStyled to={ '/trainings' }>Тренінги</NavLinkStyled>
-            <NavLinkStyled to={ '/trainers' }>Тренери</NavLinkStyled>
-            <NavLinkStyled to={ '/services' }>Послуги</NavLinkStyled>
-            <NavLinkStyled to={ '/about' }>Про нас</NavLinkStyled>
+            <NavLinkStyled to={'/'}>Головна</NavLinkStyled>
+            <NavLinkStyled to={'/trainings'}>Тренінги</NavLinkStyled>
+            <NavLinkStyled to={'/trainers'}>Тренери</NavLinkStyled>
+            <NavLinkStyled to={'/services'}>Послуги</NavLinkStyled>
+            <NavLinkStyled to={'/about'}>Про нас</NavLinkStyled>
             <MenuWrapper>
-                //TODO logic for first downloads page
-                { isAuthenticatedLocal ||  auth.isAuthenticated ?
-                    ( user.username ?
-                        ( <ButtonHeader text={ user.username } onClick={ () => handleClick( 'Menu' ) } /> )
-                        :
-                        ( <ButtonHeader text={ 'Login' } onClick={ () => handleClick( 'Login' ) } /> ) )
+                {isLogin ?
+                    (<ButtonHeader text={user.email || user.username} onClick={() => handleClick('Menu')}/>)
                     :
-                    ( <ButtonHeader text={ 'Register' } onClick={ () => handleClick( 'Register' ) } /> ) }
-                <ButtonHeader text={ 'UA' } />
+                    (<>
+                        <ButtonHeader text={'Login'} onClick={() => handleClick('Login')}/>
+                        <ButtonHeader text={'Register'} onClick={() => handleClick('Register')}/>
+                    </>)
+                }
+                <ButtonHeader text={'UA'}/>
             </MenuWrapper>
         </Wrapper>
-    );
+    )
 };
 
 export default Header;
@@ -69,7 +55,7 @@ export const Wrapper = styled.div`
     letter-spacing: 0.5px;
 `;
 
-export const NavLinkStyled = styled( NavLink )`
+export const NavLinkStyled = styled(NavLink)`
     color: var(--dark-text);
 `;
 

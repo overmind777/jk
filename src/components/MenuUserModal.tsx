@@ -5,17 +5,18 @@ import {closeModal} from '../redux/modal/modalSlice.ts';
 import {logout} from '../redux/user/userSlice.ts';
 import React from "react";
 import { createUserData } from '../redux/user/operations.ts';
+import {logoutThunk} from "../redux/auth/operations.ts";
 
 const MenuUserModal = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const userData = sessionStorage.getItem( 'userData' );
+    const token = sessionStorage.getItem( 'tokens' );
 
     const handleClickProfile = () =>{
-        if (userData){
-            const {user} = JSON.parse(userData)
-            dispatch(createUserData(user.email))
+        if (token){
+            const {accessToken} = JSON.parse(token)
+            dispatch(createUserData(accessToken))
             navigate('/profile')
             dispatch(closeModal())
         }
@@ -29,6 +30,11 @@ const MenuUserModal = () => {
             navigate('/')
             dispatch(closeModal())
             dispatch(logout())
+            const tokens = sessionStorage.getItem( 'tokens' );
+            if(tokens && tokens.length > 0){
+                const {accessToken} = JSON.parse(tokens)
+                dispatch(logoutThunk(accessToken))
+            }
             sessionStorage.removeItem('userData');
         }
     };

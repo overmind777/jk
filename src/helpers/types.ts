@@ -15,7 +15,18 @@ export interface LoginCredentials {
     password: string;
 }
 
+export interface FetchCredentials {
+    email: string;
+}
+
 export interface ApiError {
+    data: {
+        message: string;
+        statusCode: number;
+    }
+}
+
+export interface Error{
     message: string;
     statusCode: number;
 }

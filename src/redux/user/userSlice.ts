@@ -28,7 +28,8 @@ const userSlice = createSlice( {
     extraReducers: ( builder ) => {
         builder
             .addCase( createUserData.fulfilled, (state: UserState, {payload}: PayloadAction<UserState>)=>{
-                state.email = payload.email
+                console.log(payload)
+                Object.assign( state, payload );
             })
             .addCase( editUserData.fulfilled, ( state: UserState, { payload }: PayloadAction<UserState> ) => {
                 Object.assign( state, payload );

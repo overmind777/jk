@@ -1,15 +1,16 @@
 import styled from 'styled-components';
 import {NavLink, useNavigate} from 'react-router-dom';
-import {useAppDispatch} from '../helpers/hooks.ts';
+import {handleError, useAppDispatch} from '../helpers/hooks.ts';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {loginThunk} from '../redux/auth/operations.ts';
 import {loginSchema} from '../helpers/schemas.ts';
 import {InputStyled} from './SingupForm.tsx';
 import * as yup from 'yup';
-import {openModal} from '../redux/modal/modalSlice.ts';
+import {closeModal, openModal} from '../redux/modal/modalSlice.ts';
 import ButtonForm from '../shared/ButtonForm.tsx';
-import { setUser } from '../redux/user/userSlice.ts';
+import {login} from "../redux/auth/authSlice.ts";
+import {toast} from "react-toastify";
 
 type FormData = yup.InferType<typeof loginSchema>;
 
@@ -22,18 +23,18 @@ const SinginForm = () => {
     } );
 
     const onSubmit = async ( data: FormData ) => {
-        dispatch(openModal( { isOpen: false, type: '' }))
+        dispatch(closeModal())
         try {
             const result = await dispatch(loginThunk(data)).unwrap();
             reset();
             navigate('/');
             if (result) {
+                dispatch(login(data));
                 localStorage.setItem("Authenticated", "true");
-                sessionStorage.setItem('userData', JSON.stringify(result));
-                dispatch(setUser( { tokens: {accessToken: '', refreshToken: ''}, username: result.user.username, email: result.user.email }))
+                sessionStorage.setItem('tokens', JSON.stringify(result));
             }
         } catch (error) {
-            console.error("Registration failed:", error);
+            toast.error(handleError((error as Error).message));
         }
     };
 
