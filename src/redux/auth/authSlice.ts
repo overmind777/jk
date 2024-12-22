@@ -57,7 +57,7 @@ const authSlice = createSlice({
             .addMatcher(isAnyOf(
                 registerThunk.rejected,
                 loginThunk.rejected,
-                logoutThunk.rejected
+                logoutThunk.rejected,
             ), (state, {payload}: PayloadAction<unknown>) => {
                 state.error = payload as string || 'An unexpected error occurred';
                 state.isAuthenticated = false;
@@ -65,7 +65,7 @@ const authSlice = createSlice({
             .addMatcher(isAnyOf(
                 registerThunk.pending,
                 loginThunk.pending,
-                logoutThunk.pending
+                logoutThunk.pending,
             ), (state) => {
                 state.error = null;
             });

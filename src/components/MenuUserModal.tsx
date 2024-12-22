@@ -4,22 +4,16 @@ import {useAppDispatch} from '../helpers/hooks.ts';
 import {closeModal} from '../redux/modal/modalSlice.ts';
 import {logout} from '../redux/user/userSlice.ts';
 import React from "react";
-import { createUserData } from '../redux/user/operations.ts';
 import {logoutThunk} from "../redux/auth/operations.ts";
 
 const MenuUserModal = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const token = sessionStorage.getItem( 'tokens' );
+    const handleClickProfile = () => {
+        navigate('/profile')
+        dispatch(closeModal())
 
-    const handleClickProfile = () =>{
-        if (token){
-            const {accessToken} = JSON.parse(token)
-            dispatch(createUserData(accessToken))
-            navigate('/profile')
-            dispatch(closeModal())
-        }
     }
 
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLParagraphElement>): void => {
@@ -30,8 +24,8 @@ const MenuUserModal = () => {
             navigate('/')
             dispatch(closeModal())
             dispatch(logout())
-            const tokens = sessionStorage.getItem( 'tokens' );
-            if(tokens && tokens.length > 0){
+            const tokens = sessionStorage.getItem('tokens');
+            if (tokens && tokens.length > 0) {
                 const {accessToken} = JSON.parse(tokens)
                 dispatch(logoutThunk(accessToken))
             }

@@ -1,11 +1,13 @@
 import styled from 'styled-components';
+import {useNavigate} from "react-router-dom";
 
 const LoginError = () => {
+    const navigate = useNavigate();
     return (
         <Wrapper>
             <h2>'Для перегляду потрібно виконати вхід'</h2>
             <button>Login</button>
-            <button>Home</button>
+            <button onClick={()=>navigate('/')}>Home</button>
         </Wrapper>
     );
 };

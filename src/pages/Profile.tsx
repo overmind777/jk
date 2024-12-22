@@ -1,10 +1,14 @@
 import styled from 'styled-components';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import {Outlet, useNavigate} from 'react-router-dom';
+import {useState} from 'react';
+import {selectUser} from "../redux/user/userSlice.ts";
+import {useAppSelector} from "../helpers/hooks.ts";
 
 const Profile = () => {
     const navigate = useNavigate();
+    const select = useAppSelector(selectUser);
     const [pageState, setPageState] = useState(true);
+    console.log(select)
 
     const handleClick = () => {
         setPageState(false);
@@ -19,23 +23,22 @@ const Profile = () => {
                         <button onClick={handleClick}>Edit</button>
                     </ButtonWrapper>
                     <ImageWrapper>
-                        <img src="./vite.svg" alt="" />
+                        <img src="./vite.svg" alt=""/>
                         <div>
-                            <input type="file" accept={'image/*'} />
+                            <input type="file" accept={'image/*'}/>
                         </div>
                     </ImageWrapper>
                     <InfoWrapper>
-                        <h2>www@www.www</h2>
+                        <h2>{select.username}</h2>
                         <p>Статус: Новачок</p>
-                        <p>Email</p>
-                        <p>City</p>
+                        <p>{select.email}</p>
+                        <p>{select.location}</p>
                         <h3>Про мене</h3>
-                        <p>Інформація відсутня</p>
+                        <p>{select.bio}</p>
                     </InfoWrapper>
                 </Wrapper>
             ) : (
-                // Дочірні маршрути відображаються тут
-                <Outlet />
+                <Outlet/>
             )}
         </>
     );

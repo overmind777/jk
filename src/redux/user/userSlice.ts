@@ -10,8 +10,7 @@ const initialState: UserState = {
     bio: '',
     location: '',
     website: '',
-    links: [{ link: '', url: '' }],
-    error: '',
+    links: [{ id: '', link: '', url: '' }],
 };
 
 const userSlice = createSlice( {
@@ -28,15 +27,13 @@ const userSlice = createSlice( {
     extraReducers: ( builder ) => {
         builder
             .addCase( createUserData.fulfilled, (state: UserState, {payload}: PayloadAction<UserState>)=>{
-                console.log(payload)
                 Object.assign( state, payload );
             })
             .addCase( editUserData.fulfilled, ( state: UserState, { payload }: PayloadAction<UserState> ) => {
                 Object.assign( state, payload );
-                state.error = '';
             } )
             .addMatcher( isAnyOf( editUserData.rejected, createUserData.rejected ), ( state: UserState, { payload }: PayloadAction<unknown> ) => {
-                state.error = payload as string || 'Something went wrong. Please try again.';
+                console.log('Something went wrong. Please try again.');
             } );
     },
 } );

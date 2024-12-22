@@ -1,7 +1,7 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { UserState } from '../../helpers/types.ts';
-import { userApi } from '../auth/operations.ts';
-import { AppDispatch, RootState } from '../store.ts';
+import {createAsyncThunk} from '@reduxjs/toolkit';
+import {UserState} from '../../helpers/types.ts';
+import {userApi} from '../auth/operations.ts';
+import {AppDispatch, RootState} from '../store.ts';
 
 export interface AsyncThunkConfig {
     state: RootState;
@@ -11,21 +11,17 @@ export interface AsyncThunkConfig {
 
 export const createUserData = createAsyncThunk<
     UserState,
-    { token: string },
+    string,
     AsyncThunkConfig
 >(
     'createUserData',
-    async ( token, thunkApi ) => {
+    async (email, thunkApi) => {
         try {
-            const { data } = await userApi.post( '/users/create', null, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            } );
+            const {data} = await userApi.post('/users/create', {email});
             return data;
         } catch (error) {
             if (error instanceof Error && typeof error.message === 'string') {
-                return thunkApi.rejectWithValue( error.message );
+                return thunkApi.rejectWithValue(error.message);
             }
         }
     },
@@ -33,17 +29,24 @@ export const createUserData = createAsyncThunk<
 
 export const editUserData = createAsyncThunk<
     UserState,
-    { email: string, userData: Partial<UserState> },
+    { email: string, token: string, userData: Partial<UserState> },
     AsyncThunkConfig
 >(
     'editUserData',
-    async ( { email, userData }, thunkApi ) => {
+    async ({email, token, userData}, thunkApi) => {
+        console.log({email, token, userData})
         try {
-            const { data } = await userApi.patch( '/users/edit', { email, userData } );
+            const {data} = await userApi.patch('/users/edit', {email, ...userData},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             return data;
         } catch (error) {
             if (error instanceof Error && typeof error.message === 'string') {
-                return thunkApi.rejectWithValue( error.message );
+                return thunkApi.rejectWithValue(error.message);
             }
         }
     },

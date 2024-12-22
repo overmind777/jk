@@ -3,14 +3,13 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {handleError, useAppDispatch} from "../helpers/hooks.ts";
-import { registerThunk } from "../redux/auth/operations.ts";
+import {registerThunk} from "../redux/auth/operations.ts";
 import { registerSchema } from "../helpers/schemas.ts";
 import {closeModal, openModal} from '../redux/modal/modalSlice.ts';
 import ButtonForm from '../shared/ButtonForm.tsx';
 import {toast} from "react-toastify";
 
 import styled from "styled-components";
-// import {Error} from "../helpers/types.ts";
 
 type FormData = yup.InferType<typeof registerSchema>;
 

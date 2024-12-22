@@ -1,24 +1,17 @@
 import Input from '../shared/Input.tsx';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { useAppDispatch } from '../helpers/hooks.ts';
-import { editUserData } from '../redux/user/operations.ts';
+import {useNavigate} from 'react-router-dom';
+import {useState} from 'react';
+import {useAppDispatch, useAppSelector} from '../helpers/hooks.ts';
+import {editUserData} from '../redux/user/operations.ts';
+import {selectUser} from "../redux/user/userSlice.ts";
+import { v4 as uuidv4 } from 'uuid';
 
 const ProfileEdit = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch()
-
-    let email: string = '';
-    const userData = sessionStorage.getItem( 'userData' );
-    if (userData) {
-        try {
-            const parsedData = JSON.parse( userData );
-            email = parsedData?.user.email;
-        } catch (error) {
-            console.error( 'Error parsing userData:', error );
-        }
-    }
+    const tokens = sessionStorage.getItem('tokens');
+    const {email} = useAppSelector(selectUser)
 
     const [formData, setFormData] = useState({
         username: '',
@@ -27,8 +20,7 @@ const ProfileEdit = () => {
         bio: '',
         location: '',
         website: '',
-        links: [{ link: '', url: '' }],
-        error: '',
+        links: [{id: '', link: '', url: ''}],
     });
 
     const handleInputChange = (field: string, value: string) => {
@@ -38,21 +30,48 @@ const ProfileEdit = () => {
         }));
     };
 
+    const handleAddLink = () => {
+        setFormData(prevData => ({
+            ...prevData,
+            links: [...prevData.links, {id: uuidv4(), link: '', url: ''}]
+        }));
+    };
+
+    const handleLinkChange = (index: number, field: 'link' | 'url', value: string) => {
+        const updatedLinks = [...formData.links];
+        updatedLinks[index] = { ...updatedLinks[index], [field]: value };
+        setFormData(prevData => ({
+            ...prevData,
+            links: updatedLinks
+        }));
+    };
+
     const handleClick = (e) => {
         e.preventDefault()
-        dispatch(editUserData( { email: email, userData: formData }))
-            .unwrap()
-            .then(() => {
-                navigate('/user');
-            })
-            .catch((error) => {
-                console.error('Error updating user data:', error);
-            });
+        if (tokens) {
+            const token = JSON.parse((tokens))
+            const sanitizedData = {
+                ...formData,
+                links: formData.links.map(link => ({
+                    id: link.id || uuidv4(),
+                    link: link.link,
+                    url: link.url,
+                })),
+            };
+            dispatch(editUserData({email: email, userData: sanitizedData, token: token.accessToken}))
+                .unwrap()
+                .then(() => {
+                    navigate('/user');
+                })
+                .catch((error) => {
+                    console.error('Error updating user data:', error);
+                });
+        }
     };
 
     return (
         <Wrapper>
-            <form className="profile-edit-form">
+            <FormStled className="profile-edit-form">
                 <div className="form-group">
                     <label htmlFor="username">Ім'я користувача</label>
                     <Input
@@ -101,10 +120,27 @@ const ProfileEdit = () => {
                         onChange={(value) => handleInputChange('website', value)}
                     />
                 </div>
+                <div>
+                    {formData.links.map((link, index) => (
+                        <div key={index} className="link-group">
+                            <Input
+                                text={'Посилання'}
+                                value={link.link}
+                                onChange={value => handleLinkChange(index, 'link', value)}
+                            />
+                            <Input
+                                text={'URL'}
+                                value={link.url}
+                                onChange={value => handleLinkChange(index, 'url', value)}
+                            />
+                        </div>
+                    ))}
+                    <button type="button" onClick={handleAddLink}>Додати посилання</button>
+                </div>
                 <button type="submit" className="save-profile-btn" onClick={handleClick}>
                     Зберегти зміни
                 </button>
-            </form>
+            </FormStled>
         </Wrapper>
     );
 };
@@ -115,3 +151,5 @@ const Wrapper = styled.div`
     width: 100%;
     height: 100%;
 `;
+
+const FormStled = styled.form``
