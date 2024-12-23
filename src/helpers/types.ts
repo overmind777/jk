@@ -57,6 +57,6 @@ export interface UserState {
     bio: string;
     location: string;
     website: string;
-    links: { id: string, link: string, url: string }[];
+    links: { link: string, url: string }[];
 }
 

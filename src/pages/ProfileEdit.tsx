@@ -5,7 +5,6 @@ import {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../helpers/hooks.ts';
 import {editUserData} from '../redux/user/operations.ts';
 import {selectUser} from "../redux/user/userSlice.ts";
-import { v4 as uuidv4 } from 'uuid';
 
 const ProfileEdit = () => {
     const navigate = useNavigate();
@@ -20,7 +19,7 @@ const ProfileEdit = () => {
         bio: '',
         location: '',
         website: '',
-        links: [{id: '', link: '', url: ''}],
+        links: [{link: '', url: ''}],
     });
 
     const handleInputChange = (field: string, value: string) => {
@@ -33,13 +32,13 @@ const ProfileEdit = () => {
     const handleAddLink = () => {
         setFormData(prevData => ({
             ...prevData,
-            links: [...prevData.links, {id: uuidv4(), link: '', url: ''}]
+            links: [...prevData.links, {link: '', url: ''}]
         }));
     };
 
     const handleLinkChange = (index: number, field: 'link' | 'url', value: string) => {
         const updatedLinks = [...formData.links];
-        updatedLinks[index] = { ...updatedLinks[index], [field]: value };
+        updatedLinks[index] = {...updatedLinks[index], [field]: value};
         setFormData(prevData => ({
             ...prevData,
             links: updatedLinks
@@ -53,15 +52,15 @@ const ProfileEdit = () => {
             const sanitizedData = {
                 ...formData,
                 links: formData.links.map(link => ({
-                    id: link.id || uuidv4(),
                     link: link.link,
                     url: link.url,
                 })),
             };
-            dispatch(editUserData({email: email, userData: sanitizedData, token: token.accessToken}))
+            console.log(sanitizedData);
+            dispatch(editUserData({emailUser: email, userData: sanitizedData, token: token.accessToken}))
                 .unwrap()
                 .then(() => {
-                    navigate('/user');
+                    navigate('/profile');
                 })
                 .catch((error) => {
                     console.error('Error updating user data:', error);

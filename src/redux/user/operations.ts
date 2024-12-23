@@ -29,14 +29,13 @@ export const createUserData = createAsyncThunk<
 
 export const editUserData = createAsyncThunk<
     UserState,
-    { email: string, token: string, userData: Partial<UserState> },
+    { emailUser: string, token: string, userData: UserState },
     AsyncThunkConfig
 >(
     'editUserData',
-    async ({email, token, userData}, thunkApi) => {
-        console.log({email, token, userData})
+    async ({emailUser, token, userData}, thunkApi) => {
         try {
-            const {data} = await userApi.patch('/users/edit', {email, ...userData},
+            const {data} = await userApi.patch('/users/edit', {emailUser, ...userData},
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
