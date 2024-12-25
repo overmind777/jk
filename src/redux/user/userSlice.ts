@@ -1,7 +1,7 @@
-import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store.ts';
-import { User, UserState } from '../../helpers/types.ts';
-import { createUserData, editUserData } from './operations.ts';
+import {createSlice, isAnyOf, PayloadAction} from '@reduxjs/toolkit';
+import {RootState} from '../store.ts';
+import {User, UserState} from '../../helpers/types.ts';
+import {createUserData, editUserData, getUserData} from './operations.ts';
 
 const initialState: UserState = {
     username: '',
@@ -10,34 +10,36 @@ const initialState: UserState = {
     bio: '',
     location: '',
     website: '',
-    links: [{ id: '', link: '', url: '' }],
+    links: [{link: '', url: ''}],
 };
 
-const userSlice = createSlice( {
+const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setUser: ( state, action: PayloadAction<User> ) => {
+        setUser: (state, action: PayloadAction<User>) => {
             state.username = action.payload.username;
             state.email = action.payload.email;
 
         },
-        logout: () => initialState,
     },
-    extraReducers: ( builder ) => {
+    extraReducers: (builder) => {
         builder
-            .addCase( createUserData.fulfilled, (state: UserState, {payload}: PayloadAction<UserState>)=>{
-                Object.assign( state, payload );
+            .addCase(createUserData.fulfilled, (state: UserState, {payload}: PayloadAction<UserState>) => {
+                Object.assign(state, payload);
             })
-            .addCase( editUserData.fulfilled, ( state: UserState, { payload }: PayloadAction<UserState> ) => {
-                Object.assign( state, payload );
-            } )
-            .addMatcher( isAnyOf( editUserData.rejected, createUserData.rejected ), ( state: UserState, { payload }: PayloadAction<unknown> ) => {
-                console.log('Something went wrong. Please try again.');
-            } );
+            .addCase(getUserData.fulfilled, (state: UserState, {payload}: PayloadAction<UserState>) => {
+                Object.assign(state, payload);
+            })
+            .addCase(editUserData.fulfilled, (state: UserState, {payload}: PayloadAction<UserState>) => {
+                Object.assign(state, payload);
+            })
+            .addMatcher(isAnyOf(editUserData.rejected, createUserData.rejected, getUserData.rejected), (state, {payload}) => {
+                console.log('error', payload);
+            });
     },
-} );
+});
 
 export const userReducer = userSlice.reducer;
-export const selectUser = ( state: RootState ) => state.user;
-export const { setUser, logout } = userSlice.actions;
+export const selectUser = (state: RootState) => state.user;
+export const {setUser} = userSlice.actions;

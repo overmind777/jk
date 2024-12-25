@@ -4,13 +4,14 @@ import {useNavigate} from 'react-router-dom';
 import {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../helpers/hooks.ts';
 import {editUserData} from '../redux/user/operations.ts';
-import {selectUser} from "../redux/user/userSlice.ts";
+import {selectAuthUser} from "../redux/auth/selectors.ts";
 
 const ProfileEdit = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch()
     const tokens = sessionStorage.getItem('tokens');
-    const {email} = useAppSelector(selectUser)
+    const {user} = useAppSelector(selectAuthUser)
+    console.log(user.email)
 
     const [formData, setFormData] = useState({
         username: '',
@@ -45,8 +46,7 @@ const ProfileEdit = () => {
         }));
     };
 
-    const handleClick = (e) => {
-        e.preventDefault()
+    const handleClick = async () => {
         if (tokens) {
             const token = JSON.parse((tokens))
             const sanitizedData = {
@@ -56,9 +56,8 @@ const ProfileEdit = () => {
                     url: link.url,
                 })),
             };
-            console.log(sanitizedData);
-            dispatch(editUserData({emailUser: email, userData: sanitizedData, token: token.accessToken}))
-                .unwrap()
+
+            await dispatch(editUserData({emailUser: user.email, userData: sanitizedData, token: token.accessToken}))
                 .then(() => {
                     navigate('/profile');
                 })

@@ -1,6 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import axios, {AxiosError} from "axios";
-import {ApiError, LoginCredentials, RegisterCredentials, Tokens, User} from "../../helpers/types.ts";
+import axios from "axios";
+import {LoginCredentials, RegisterCredentials, Tokens, User} from "../../helpers/types.ts";
+import {handleError} from "../../helpers/hooks.ts";
 
 export const userApi = axios.create({
     baseURL: "http://localhost:3000",
@@ -13,12 +14,7 @@ export const registerThunk = createAsyncThunk<User, RegisterCredentials>(
             const {data} = await userApi.post('/auth/register', credentials)
             return data
         } catch (error) {
-            if (error instanceof AxiosError && error.response) {
-                return thunkApi.rejectWithValue(error.response.data as ApiError);
-            }
-            return thunkApi.rejectWithValue({
-                message: 'An unexpected error occurred',
-            });
+            return thunkApi.rejectWithValue(handleError((error as Error).message));
         }
     }
 )
@@ -30,12 +26,7 @@ export const loginThunk = createAsyncThunk<Tokens, LoginCredentials>(
             const {data} = await userApi.post('/auth/login', credential)
             return data
         } catch (error) {
-            if (error instanceof AxiosError && error.response) {
-                return thunkApi.rejectWithValue(error.response.data as ApiError);
-            }
-            return thunkApi.rejectWithValue({
-                message: 'An unexpected error occurred',
-            });
+            return thunkApi.rejectWithValue(handleError((error as Error).message));
         }
     }
 )
@@ -52,12 +43,24 @@ export const logoutThunk = createAsyncThunk<{ message: string }, string>(
             return data
         } catch
             (error) {
-            if (error instanceof AxiosError && error.response) {
-                return thunkApi.rejectWithValue(error.response.data as ApiError);
-            }
-            return thunkApi.rejectWithValue({
-                message: 'An unexpected error occurred',
-            });
+            return thunkApi.rejectWithValue(handleError((error as Error).message));
+        }
+    }
+)
+
+export const refreshThunk = createAsyncThunk<Tokens, { credential: string }>(
+    'refresh',
+    async (credential, thunkApi) => {
+        try {
+            const {data} = await userApi.post('/auth/refresh', null, {
+                headers: {
+                    Authorization: `Bearer ${credential}`
+                }
+            })
+            return data
+        } catch
+            (error) {
+            return thunkApi.rejectWithValue(handleError((error as Error).message));
         }
     }
 )

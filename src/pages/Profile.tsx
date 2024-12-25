@@ -1,23 +1,32 @@
 import styled from 'styled-components';
 import {Outlet, useNavigate} from 'react-router-dom';
 import {useState} from 'react';
+import {useAppDispatch, useAppSelector} from "../helpers/hooks.ts";
+import {getUserData} from "../redux/user/operations.ts";
 import {selectUser} from "../redux/user/userSlice.ts";
-import {useAppSelector} from "../helpers/hooks.ts";
 
 const Profile = () => {
     const navigate = useNavigate();
-    const select = useAppSelector(selectUser);
-    const [pageState, setPageState] = useState(true);
-    console.log(select)
+    const dispatch = useAppDispatch();
+    const userData = useAppSelector(selectUser);
+
+    const tokens = sessionStorage.getItem('tokens');
+
+    // const [pageState, setPageState] = useState(true);
+
+    if (tokens) {
+        const token = JSON.parse(tokens);
+        dispatch(getUserData(token.accessToken));
+    }
 
     const handleClick = () => {
-        setPageState(false);
-        navigate('/profile/profile-edit'); // Перехід до дочірнього маршруту
+        // setPageState(false);
+        navigate('/profile/edit'); // Перехід до дочірнього маршруту
     };
 
     return (
         <>
-            {pageState ? (
+            {/*{pageState ? (*/}
                 <Wrapper>
                     <ButtonWrapper>
                         <button onClick={handleClick}>Edit</button>
@@ -29,17 +38,17 @@ const Profile = () => {
                         </div>
                     </ImageWrapper>
                     <InfoWrapper>
-                        <h2>{select.username}</h2>
+                        <h2>{userData.username}</h2>
                         <p>Статус: Новачок</p>
-                        <p>{select.email}</p>
-                        <p>{select.location}</p>
+                        <p>Email {userData.email}</p>
+                        <p>{userData.location}</p>
                         <h3>Про мене</h3>
-                        <p>{select.bio}</p>
+                        <p>{userData.bio}</p>
                     </InfoWrapper>
                 </Wrapper>
-            ) : (
+            {/*) : (*/}
                 <Outlet/>
-            )}
+            {/*)}*/}
         </>
     );
 };

@@ -2,6 +2,7 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {UserState} from '../../helpers/types.ts';
 import {userApi} from '../auth/operations.ts';
 import {AppDispatch, RootState} from '../store.ts';
+import {handleError} from "../../helpers/hooks.ts";
 
 export interface AsyncThunkConfig {
     state: RootState;
@@ -20,9 +21,7 @@ export const createUserData = createAsyncThunk<
             const {data} = await userApi.post('/users/create', {email});
             return data;
         } catch (error) {
-            if (error instanceof Error && typeof error.message === 'string') {
-                return thunkApi.rejectWithValue(error.message);
-            }
+            return thunkApi.rejectWithValue(handleError((error as Error).message));
         }
     },
 );
@@ -44,9 +43,27 @@ export const editUserData = createAsyncThunk<
             );
             return data;
         } catch (error) {
-            if (error instanceof Error && typeof error.message === 'string') {
-                return thunkApi.rejectWithValue(error.message);
-            }
+            return thunkApi.rejectWithValue(handleError((error as Error).message));
         }
     },
 );
+
+export const getUserData = createAsyncThunk<
+    UserState,
+    { token: string },
+    AsyncThunkConfig
+>(
+    'getUserData',
+    async (token, thunkApi) => {
+        try {
+            const {data} = await userApi.post(`/users/user`, null, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return data;
+        } catch (error) {
+            return thunkApi.rejectWithValue(handleError((error as Error).message));
+        }
+    }
+)

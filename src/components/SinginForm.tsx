@@ -30,13 +30,14 @@ const SinginForm = () => {
             reset();
             navigate('/');
             if (result) {
-                dispatch(createUserData(data.email)).unwrap();
-                dispatch(login(data));
+                await dispatch(createUserData(data.email))
+                dispatch(login({email: data.email, status: 200}));
                 localStorage.setItem("Authenticated", "true");
                 sessionStorage.setItem('tokens', JSON.stringify(result));
             }
         } catch (error) {
             toast.error(handleError((error as Error).message));
+            throw handleError((error as Error).message)
         }
     };
 

@@ -6,9 +6,8 @@ import {openModal} from '../redux/modal/modalSlice.ts';
 import {selectAuthUser} from "../redux/auth/selectors.ts";
 
 const Header = () => {
-    const dispatch = useAppDispatch();
-    const {isLogin, user} = useAppSelector(selectAuthUser);
-    console.log(user)
+    const dispatch = useAppDispatch()
+    const {user, isLogin} = useAppSelector(selectAuthUser)
 
     const handleClick = (type: string): void => {
         dispatch(openModal({isOpen: true, type: type}));
@@ -22,13 +21,13 @@ const Header = () => {
             <NavLinkStyled to={'/services'}>Послуги</NavLinkStyled>
             <NavLinkStyled to={'/about'}>Про нас</NavLinkStyled>
             <MenuWrapper>
-                {isLogin ?
-                    (<ButtonHeader text={user.email || user.username} onClick={() => handleClick('Menu')}/>)
-                    :
+                {!isLogin ?
                     (<>
                         <ButtonHeader text={'Login'} onClick={() => handleClick('Login')}/>
                         <ButtonHeader text={'Register'} onClick={() => handleClick('Register')}/>
                     </>)
+                    :
+                    (<ButtonHeader text={user.username || user.email} onClick={() => handleClick('Menu')}/>)
                 }
                 <ButtonHeader text={'UA'}/>
             </MenuWrapper>

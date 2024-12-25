@@ -32,7 +32,7 @@ const router = createBrowserRouter( [
                 ),
             },
             {
-                path: 'profile/*',
+                path: 'profile',
                 element: (
                     <PrivateRoute>
                         <Profile />
@@ -40,7 +40,7 @@ const router = createBrowserRouter( [
                 ),
                 children: [
                     {
-                        path: 'profile-edit',
+                        path: 'edit',
                         element: <ProfileEdit />,
                     },
                 ],

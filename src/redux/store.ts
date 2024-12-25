@@ -17,7 +17,7 @@ import {userReducer} from "./user/userSlice.ts";
 const authPersistConfig = {
     key: "auth",
     storage,
-    whitelist: ["token", "favorites"],
+    whitelist: ["user", "isLogin"],
 };
 
 const rootReducer = combineReducers({

@@ -23,13 +23,12 @@ const MenuUserModal = () => {
         } else {
             navigate('/')
             dispatch(closeModal())
-            dispatch(logout())
             const tokens = sessionStorage.getItem('tokens');
             if (tokens && tokens.length > 0) {
                 const {accessToken} = JSON.parse(tokens)
                 dispatch(logoutThunk(accessToken))
             }
-            sessionStorage.removeItem('userData');
+            sessionStorage.removeItem('tokens');
         }
     };
 

@@ -7,11 +7,11 @@ import { persistor, store } from './redux/store.ts';
 import { Provider } from 'react-redux';
 
 createRoot( document.getElementById( 'root' )! ).render(
-    <StrictMode>
+    // <StrictMode>
         <Provider store={ store }>
-            <PersistGate persistor={ persistor }>
+            <PersistGate loading={null} persistor={ persistor }>
                 <App />
             </PersistGate>
         </Provider>
-    </StrictMode>,
+    // </StrictMode>,
 );
