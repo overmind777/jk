@@ -1,32 +1,24 @@
 import styled from 'styled-components';
 import {Outlet, useNavigate} from 'react-router-dom';
-import {useState} from 'react';
-import {useAppDispatch, useAppSelector} from "../helpers/hooks.ts";
-import {getUserData} from "../redux/user/operations.ts";
+import {useAppSelector} from "../helpers/hooks.ts";
 import {selectUser} from "../redux/user/userSlice.ts";
+import {useEffect} from "react";
 
 const Profile = () => {
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
     const userData = useAppSelector(selectUser);
+    const isEditMode = location.pathname.includes('edit');
 
-    const tokens = sessionStorage.getItem('tokens');
-
-    // const [pageState, setPageState] = useState(true);
-
-    if (tokens) {
-        const token = JSON.parse(tokens);
-        dispatch(getUserData(token.accessToken));
-    }
+    useEffect(() => {
+        console.log(userData);})
 
     const handleClick = () => {
-        // setPageState(false);
-        navigate('/profile/edit'); // Перехід до дочірнього маршруту
+        navigate('edit'); // Перехід до дочірнього маршруту
     };
 
     return (
         <>
-            {/*{pageState ? (*/}
+            {!isEditMode ? (
                 <Wrapper>
                     <ButtonWrapper>
                         <button onClick={handleClick}>Edit</button>
@@ -46,9 +38,9 @@ const Profile = () => {
                         <p>{userData.bio}</p>
                     </InfoWrapper>
                 </Wrapper>
-            {/*) : (*/}
+            ) : (
                 <Outlet/>
-            {/*)}*/}
+            )}
         </>
     );
 };

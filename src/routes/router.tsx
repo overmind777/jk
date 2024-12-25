@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import {createBrowserRouter} from 'react-router-dom';
 import Layout from '../pages/Layout.tsx';
 import Home from '../pages/Home.tsx';
 import Trainings from '../pages/Trainings.tsx';
@@ -12,22 +12,22 @@ import Profile from '../pages/Profile.tsx';
 import LoginError from '../pages/LoginError.tsx';
 import PrivateRoute from '../components/PrivateRoute.tsx';
 
-const router = createBrowserRouter( [
+const router = createBrowserRouter([
     {
         path: '/',
-        element: <Layout />,
+        element: <Layout/>,
         children: [
-            { index: true, element: <Home /> },
-            { path: 'trainings', element: <Trainings /> },
-            { path: 'trainers', element: <Trainers /> },
-            { path: 'services', element: <Services /> },
-            { path: 'about', element: <About /> },
-            { path: 'login-error', element: <LoginError /> },
+            {index: true, element: <Home/>},
+            {path: 'trainings', element: <Trainings/>},
+            {path: 'trainers', element: <Trainers/>},
+            {path: 'services', element: <Services/>},
+            {path: 'about', element: <About/>},
+            {path: 'login-error', element: <LoginError/>},
             {
                 path: 'admin/*',
                 element: (
                     <PrivateRoute>
-                        <AdminPanel />
+                        <AdminPanel/>
                     </PrivateRoute>
                 ),
             },
@@ -35,24 +35,23 @@ const router = createBrowserRouter( [
                 path: 'profile',
                 element: (
                     <PrivateRoute>
-                        <Profile />
+                        <Profile/>
                     </PrivateRoute>
                 ),
                 children: [
                     {
                         path: 'edit',
-                        element: <ProfileEdit />,
+                        element: <ProfileEdit/>,
                     },
                 ],
             },
-            // 404 сторінка як дочірній маршрут Layout
             {
                 path: '*',
-                element: <NotFound />,
+                element: <NotFound/>,
             },
         ],
     },
 
-] );
+]);
 
 export default router;

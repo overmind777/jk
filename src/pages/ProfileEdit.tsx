@@ -1,7 +1,7 @@
 import Input from '../shared/Input.tsx';
 import styled from 'styled-components';
-import {useNavigate} from 'react-router-dom';
-import {useState} from 'react';
+import {useNavigate, useSearchParams} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../helpers/hooks.ts';
 import {editUserData} from '../redux/user/operations.ts';
 import {selectAuthUser} from "../redux/auth/selectors.ts";
@@ -11,7 +11,14 @@ const ProfileEdit = () => {
     const dispatch = useAppDispatch()
     const tokens = sessionStorage.getItem('tokens');
     const {user} = useAppSelector(selectAuthUser)
-    console.log(user.email)
+    const [searchParams] = useSearchParams()
+
+    useEffect(() => {
+        if (!searchParams.toString()) {
+            console.log(searchParams);
+            console.log('No query parameters provided');
+        }
+    },[searchParams])
 
     const [formData, setFormData] = useState({
         username: '',
@@ -46,7 +53,9 @@ const ProfileEdit = () => {
         }));
     };
 
-    const handleClick = async () => {
+    const handleClick = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log(tokens)
         if (tokens) {
             const token = JSON.parse((tokens))
             const sanitizedData = {
@@ -57,19 +66,25 @@ const ProfileEdit = () => {
                 })),
             };
 
-            await dispatch(editUserData({emailUser: user.email, userData: sanitizedData, token: token.accessToken}))
-                .then(() => {
-                    navigate('/profile');
-                })
-                .catch((error) => {
-                    console.error('Error updating user data:', error);
-                });
+            try {
+                await dispatch(editUserData({
+                    emailUser: user.email,
+                    userData: sanitizedData,
+                    token: token.accessToken
+                })).unwrap();
+
+                navigate('/profile'); // Переконайтеся, що шлях коректний
+            } catch (error) {
+                console.error('Error updating user data:', error);
+                // Ви можете додати логіку показу повідомлення користувачеві
+            }
+
         }
     };
 
     return (
         <Wrapper>
-            <FormStled className="profile-edit-form">
+            <FormStled className="profile-edit-form" onSubmit={handleClick}>
                 <div className="form-group">
                     <label htmlFor="username">Ім'я користувача</label>
                     <Input
@@ -135,7 +150,7 @@ const ProfileEdit = () => {
                     ))}
                     <button type="button" onClick={handleAddLink}>Додати посилання</button>
                 </div>
-                <button type="submit" className="save-profile-btn" onClick={handleClick}>
+                <button type="submit" className="save-profile-btn">
                     Зберегти зміни
                 </button>
             </FormStled>
