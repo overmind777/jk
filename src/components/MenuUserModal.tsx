@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {useAppDispatch} from '../helpers/hooks.ts';
 import {closeModal} from '../redux/modal/modalSlice.ts';
-import {logout} from '../redux/user/userSlice.ts';
 import React from "react";
 import {logoutThunk} from "../redux/auth/operations.ts";
+import ThemeSwitcher from './ThemeSwitcher.tsx';
 
 const MenuUserModal = () => {
     const dispatch = useAppDispatch();
@@ -34,13 +34,14 @@ const MenuUserModal = () => {
 
     return (
         <ModalMenuStyled>
-            <ul>
-                <li><Link to={'/profile'} onClick={handleClickProfile}><p>Профіль</p></Link></li>
-                <li><Link to={'/settings'} onClick={handleClick}><p>Налаштування</p></Link></li>
-                <li>
-                    <p onClick={handleClick}>Вийти</p>
-                </li>
-            </ul>
+            <ListStyled>
+                <ItemStyled><SpanStyled onClick={handleClickProfile}>Профіль</SpanStyled></ItemStyled>
+                <ItemStyled><SpanStyled onClick={handleClick}>Налаштування</SpanStyled></ItemStyled>
+                <ItemStyled><ThemeSwitcher /></ItemStyled>
+                <ItemStyled>
+                    <SpanStyled onClick={handleClick}>Вийти</SpanStyled>
+                </ItemStyled>
+            </ListStyled>
         </ModalMenuStyled>
     );
 };
@@ -52,25 +53,25 @@ const ModalMenuStyled = styled.div`
     justify-content: center;
     align-items: center;
     background-color: white;
+`
 
-    ul {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        list-style: none;
-        padding: 0;
+const ListStyled = styled.ul`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+`
 
-        li {
-            cursor: pointer;
+const ItemStyled = styled.li`
+    color: black;
+`
 
-            p {
-                margin: 0;
-                color: black;
-
-                &:hover {
-                    color: #1cb955;
-                }
-            }
-        }
+export const SpanStyled = styled.span`
+    cursor: pointer;
+    &:hover {
+        color: #747bff;
     }
-`;
+`

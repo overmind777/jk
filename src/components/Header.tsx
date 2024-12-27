@@ -55,7 +55,7 @@ export const Wrapper = styled.div`
 `;
 
 export const NavLinkStyled = styled(NavLink)`
-    color: var(--dark-text);
+    color: var(--text-color);
 `;
 
 export const MenuWrapper = styled.div`

@@ -6,9 +6,9 @@ import Trainers from '../pages/Trainers.tsx';
 import Services from '../pages/Services.tsx';
 import About from '../pages/About.tsx';
 import AdminPanel from '../pages/AdminPanel.tsx';
-import ProfileEdit from '../pages/ProfileEdit.tsx';
+import ProfileEdit from '../pages/Profile/Pfileedit/ProfileEdit.tsx';
 import NotFound from '../pages/NotFound.tsx';
-import Profile from '../pages/Profile.tsx';
+import Profile from '../pages/Profile/Profile.tsx';
 import LoginError from '../pages/LoginError.tsx';
 import PrivateRoute from '../components/PrivateRoute.tsx';
 

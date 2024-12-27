@@ -1,44 +1,33 @@
 #root {
-  max-width: 1280px;
+  width: 100vw;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+body {
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  place-items: center;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+  font-family: Arial, sans-serif;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+button {
+  padding: 10px 20px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+button:hover {
+  background-color: var(--text-color);
+  color: var(--background-color);
 }
 
 .modal-login,
@@ -53,9 +42,8 @@
 .modal-register.modal-content,
 .modal-login.modal-content {
   position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
   display: inline-table;
   width: 500px;
 }
@@ -63,6 +51,15 @@
 .modal-overlay {
   background-color: rgba(0, 0, 0, 0.5); /* Напівпрозорий фон */
   z-index: 999; /* Встановлює пріоритет для фону */
+
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
@@ -71,9 +68,28 @@
   z-index: 1000; /* Найвищий пріоритет для вмісту модального вікна */
   top: 60px;
   right: 100px;
+
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 90%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -60%);
+  animation: fadeIn 0.3s forwards;
 }
 
 .modal-menu.modal-content {
   display: inline-table;
 }
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

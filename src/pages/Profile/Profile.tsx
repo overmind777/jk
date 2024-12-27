@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import {Outlet, useNavigate} from 'react-router-dom';
-import {useAppSelector} from "../helpers/hooks.ts";
-import {selectUser} from "../redux/user/userSlice.ts";
+import {useAppSelector} from "../../helpers/hooks.ts";
+import {selectUser} from "../../redux/user/userSlice.ts";
 import {useEffect} from "react";
 
 const Profile = () => {

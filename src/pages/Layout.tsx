@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom';
 import Header from '../components/Header.tsx';
 import Modal from '../components/Modal/Modal.tsx';
-import SinginForm from '../components/SinginForm.tsx';
-import SingupForm from '../components/SingupForm.tsx';
+import SinginForm from '../components/Forms/SinginForm.tsx';
+import SingupForm from '../components/Forms/SingupForm.tsx';
 import { useAppSelector } from '../helpers/hooks.ts';
 import { selectModal } from '../redux/modal/modalSlice.ts';
 import MenuUserModal from '../components/MenuUserModal.tsx';

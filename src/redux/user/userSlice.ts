@@ -30,8 +30,8 @@ const userSlice = createSlice({
                 return { ...state, ...payload };
             })
             .addMatcher(isAnyOf(editUserData.rejected, createUserData.rejected, getUserData.rejected, editUserData.pending, createUserData.pending, getUserData.pending), (state, {payload}) => {
-                console.log('error', state);
-                console.log('error', payload);
+                console.log(state);
+                console.log(payload);
             });
     },
 });
